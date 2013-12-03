@@ -1,0 +1,16 @@
+<input type="text" ng-model="filteringText" class="input-text" ng-focus="showDropdown=true" ng-init="showDropdown=false"/> 
+
+<div class="filter" ng-show="showDropdown" ng-mouseleave="showDropdown=false">
+
+	<input type="checkbox" class="select-all" ng-model="master" ng-change="changeMasterSelection(master)"/>Select all<br />
+	
+	<div ng-repeat="group in collection" ng-init="extend = false">
+		<img alt="Extend" src="img/sq_plus_icon25.png" ng-click="extend = true" ng-hide="extend" /> 
+		<img alt="Collapse" src="img/sq_minus_icon25.png" ng-click="extend = false" ng-show="extend" /> 
+		<input type="checkbox" ng-model="group.selected"  ng-change="changeGroupSelection(group)">{{ group.name }} <br>
+		<div class="filter-item" ng-repeat="item in group.items | filter : filteringText" ng-show="extend">
+			<input type="checkbox" ng-model="item.selected">{{ item.name }} <br>
+		</div>
+	</div>
+
+</div>

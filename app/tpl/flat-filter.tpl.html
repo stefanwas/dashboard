@@ -1,0 +1,12 @@
+<input type="text" ng-model="filteringText" class="input-text" ng-focus="showDropdown=true" ng-init="showDropdown=false"/> 
+
+<div class="filter" ng-show="showDropdown" ng-mouseleave="showDropdown=false">
+
+	<input type="checkbox" ng-model="master" ng-change="changeMasterSelection(master)"/>Select all<br />
+
+	<div ng-repeat="item in collection | filter : filteringText">
+		<input type="checkbox" ng-model="item.selected">{{ item.name }} <br>
+	</div>
+
+</div>
+

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="dashboard">
+<head>
+	<title>Management Dashboard</title>
+	<!-- <link rel="stylesheet" type="text/css" href="css/bootstrap.css" /> -->
+	<link rel="stylesheet" type="text/css" href="css/dashboard.css" />
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body ng-controller="FilterController" >
+
+	<table>
+		<tbody>
+			<tr>
+				<td>Card types</td>
+				<td>Categories</td>
+			</tr>
+			<tr>
+				<td><flat-filter collection="cardTypes"> </flat-filter></td>
+				<td><flat-filter collection="categories"> </flat-filter></td>
+			</tr>
+			
+		</tbody>
+	</table>
+
+	<table>
+		<tbody>
+			<tr>
+				<td>Region / Country</td>
+				<td>ABB Division / BU</td>
+			</tr>
+			<tr>
+				<td><hierarchical-filter collection="countries"> </hierarchical-filter></td>
+				<td><hierarchical-filter collection="divisions"> </hierarchical-filter></td>
+			</tr>
+			
+		</tbody>
+	</table>
+	
+<!-- 	<span>---------------------------------------</span>
+	<br/>
+	
+	<table class='container-fluid'>
+		<tbody>
+			<tr>
+				<td>Locations</td>
+			</tr>
+			<tr>
+				<td><input class="input-text" type="text" ng-model="selected" typeahead="location for location in states | filter:$viewValue | limitTo:8"></td>
+			</tr>
+			
+		</tbody>
+	</table>	
+	<span>---------------------------------------</span>
+	<br/> -->
+	<br/>
+	
+
+	<pre>Selected locations: {{allSelected}}</pre>
+	<br/>
+	Locations:
+	<br/>	
+	<input type="text" value="All" ng-model="filteringText" class="input-text" ng-focus="showDropdown=true" ng-init="showDropdown=false" /> 
+	<div class="filter" ng-show="showDropdown" ng-mouseleave="showDropdown=false">
+		<ul>
+			<li ng-repeat="item in locations2 | filter : filteringText | limitTo : 10">
+				<input type="checkbox" ng-model="item.selected" ng-change="addOrRemove(item.name)">{{ item.name }}
+			</li>
+		</ul>
+	</div>
+
+	<br />
+	
+	
+	<script src="lib/angular/angular-1.2.1.js"></script>
+	<script src="lib/angular/angular-resource.js"></script>
+	
+	<script src="lib/bootstrap/ui-bootstrap-tpls-0.7.0.js"></script>
+	
+	<script src="js/dashboard.js"></script>
+	<script src="js/dashboard-controllers.js"></script>
+	<script src="js/dashboard-directives.js"></script>
+	<script src="js/dashboard-services.js"></script>
+</body>
