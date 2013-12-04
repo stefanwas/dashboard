@@ -60,17 +60,6 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 				});
 			}, true);		
 			
-//			isInside =  function(event, elem) {
-//				var e = event.target;
-//				
-//				while (e != null) {
-//					if (e == elem) return true;
-//					e = e.parentElement;
-//				}
-//				
-//				return false;
-//			}
-			
 			dismissClickHandler = function (event) {
 				if (!utils.isInsidex(event, element[0])) {
 					scope.showDropdown = false;
