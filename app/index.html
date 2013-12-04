@@ -16,8 +16,8 @@
 				<td>Categories</td>
 			</tr>
 			<tr>
-				<td><flat-filter collection="cardTypes"> </flat-filter></td>
-				<td><flat-filter collection="categories"> </flat-filter></td>
+				<td><flat-filter id="1ct" collection="cardTypes"> </flat-filter></td>
+				<td><flat-filter id="2ca" collection="categories"> </flat-filter></td>
 			</tr>
 			
 		</tbody>
@@ -56,7 +56,9 @@
 	<br/>
 	
 
-	<pre>Selected locations: {{allSelected}}</pre>
+	<div ng-show="showDropdown">Selected locations:
+		<pre><b ng-repeat="sel in allSelected">{{sel}}<br/></b></pre>
+	</div>
 	<br/>
 	Locations:
 	<br/>	
@@ -68,6 +70,7 @@
 			</li>
 		</ul>
 	</div>
+	
 
 	<br />
 	
@@ -81,4 +84,5 @@
 	<script src="js/dashboard-controllers.js"></script>
 	<script src="js/dashboard-directives.js"></script>
 	<script src="js/dashboard-services.js"></script>
+	<script src="js/dashboard-utils.js"></script>
 </body>

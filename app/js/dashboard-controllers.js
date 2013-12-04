@@ -1,7 +1,7 @@
 /* Controllers */
 
 angular.module('dashboard.controllers', ['ngResource'])
-	.controller('FilterController', function($scope, $resource) {
+	.controller('FilterController', function($scope, $resource, $document) {
 
 		$scope.countries = [
 			                   {name: "Europe",
@@ -133,6 +133,8 @@ angular.module('dashboard.controllers', ['ngResource'])
 			                      {name: 'Wyoming', selected: false} 
 			                      ];
 			
+
+			  
 			  $scope.addOrRemove = function (item) {
 				  var index = $scope.allSelected.indexOf(item);
 				  
