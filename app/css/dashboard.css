@@ -28,7 +28,7 @@
 	border-radius : 3px;	
 	color: #555555;	
 	background-color: #ffffff;
-	position: absolute;
+	/* position: absolute; */
 	/* float: left; */
 	z-index: 100;
 }

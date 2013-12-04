@@ -1,0 +1,12 @@
+<input type="text" value="All" ng-model="filteringText" class="input-text" ng-focus="showDropdown=true" ng-init="showDropdown=false" />
+<div class="filter" ng-show="showDropdown" ng-mouseleave="showDropdown=false">
+	<ul>
+		<li ng-repeat="item in collection | filter : filteringText | limitTo : 10">
+			<input type="checkbox" ng-model="item.selected" ng-change="addOrRemove(item.name)">{{ item.name }}
+		</li>
+	</ul>
+</div>
+<div ng-show="showDropdown" style="float:left">
+Selected locations:
+<pre style="display:block;"><b ng-repeat="sel in selectedItems">{{sel}}<br /></b></pre>
+</div>

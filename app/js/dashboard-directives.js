@@ -84,7 +84,7 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 			}
 			
 			scope.unbindClickHandler = function (element) {
-//				$document.off('click', dismissClickHandler);			
+//				$document.off('click', dismissClickHandler);
 			}
 
 			scope.bindClickHandler();
@@ -98,11 +98,28 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 	    };
 	}])
 	
-	.directive('searchFilter', function () {
+	.directive('dynamicFlatFilter', function () {
+		
+		function link(scope, element, attrs) {
+			
+			scope.selectedItems = [];
+			
+			scope.addOrRemove = function (item) {
+				var index = scope.selectedItems.indexOf(item);
+				
+				if (index >= 0) {
+					scope.selectedItems.splice(index, 1);
+				} else {
+					scope.selectedItems.push(item);
+				}
+			};
+		}
+		
 	    return {
 	        restrict: 'E',
 	        scope: {collection: '='},
-	        templateUrl: 'tpl/search-filter.tpl.html'
+	        templateUrl: 'tpl/dynamic-flat-filter.tpl.html',
+	        link : link
 	    };		
 	})
 
