@@ -1,7 +1,7 @@
 /* Directives */
 
 angular.module('dashboard.directives', ['dashboard.utils'])
-	.directive('hierarchicalFilter', function () {
+	.directive('hierarchicalFilter', ['$document', 'utils', function($document, utils) {
 	
 		function link(scope, element, attrs) {
 			
@@ -30,7 +30,24 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 						}
 					});
 				});
-			}, true);		
+			}, true);	
+			
+			scope.dismissClickHandler = function (event) {
+				if (!utils.isInside(event, element[0])) {
+					scope.showDropdown = false;
+					scope.unbindClickHandler();
+					scope.$apply();
+				}
+			};
+			
+			scope.bindClickHandler = function (handler) {
+				$document.on('click', null, scope.dismissClickHandler);	
+			}
+			
+			scope.unbindClickHandler = function () {
+				$document.off('click', null, scope.dismissClickHandler);
+			}
+
 		}
 		
 	    return {
@@ -39,7 +56,7 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 	        templateUrl: 'tpl/hierarchical-filter.tpl.html',
 	        link : link
 	    };
-	})
+	}])
 	
 	.directive('flatFilter', ['$document', 'utils', function($document, utils) {
 	
@@ -60,23 +77,22 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 				});
 			}, true);		
 			
-			dismissClickHandler = function (event) {
-				if (!utils.isInsidex(event, element[0])) {
+			scope.dismissClickHandler = function (event) {
+				if (!utils.isInside(event, element[0])) {
 					scope.showDropdown = false;
-					scope.unbindClickHandler(element[0]);
+					scope.unbindClickHandler();
 					scope.$apply();
 				}
 			};
 			
 			scope.bindClickHandler = function () {
-				$document.on('click', dismissClickHandler);		
+				$document.on('click', null, scope.dismissClickHandler);	
 			}
 			
-			scope.unbindClickHandler = function (element) {
-//				$document.off('click', dismissClickHandler);
+			scope.unbindClickHandler = function () {
+				$document.off('click', null, scope.dismissClickHandler);
 			}
 
-			scope.bindClickHandler();
 		}
 		
 	    return {
@@ -87,7 +103,7 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 	    };
 	}])
 	
-	.directive('dynamicFlatFilter', function () {
+	.directive('dynamicFlatFilter', ['$document', 'utils', function($document, utils) {
 		
 		function link(scope, element, attrs) {
 			
@@ -102,6 +118,23 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 					scope.selectedItems.push(item);
 				}
 			};
+			
+			scope.dismissClickHandler = function (event) {
+				if (!utils.isInside(event, element[0])) {
+					scope.showDropdown = false;
+					scope.unbindClickHandler();
+					scope.$apply();
+				}
+			};
+			
+			scope.bindClickHandler = function () {
+				$document.on('click', null, scope.dismissClickHandler);	
+			}
+			
+			scope.unbindClickHandler = function () {
+				$document.off('click', null, scope.dismissClickHandler);
+			}
+			
 		}
 		
 	    return {
@@ -110,7 +143,7 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 	        templateUrl: 'tpl/dynamic-flat-filter.tpl.html',
 	        link : link
 	    };		
-	})
+	}])
 
 	
 	.directive('autoComplete', function($timeout) {

@@ -1,7 +1,7 @@
 angular.module('dashboard.utils', [])
 .factory('utils', function() {
 	return {
-		isInsidex : function(event, elem) {
+		isInside : function(event, elem) {
 			var e = event.target;
 			
 			while (e != null) {
