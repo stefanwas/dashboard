@@ -115,6 +115,8 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 				$document.off('click', null, scope.dismissClickHandler);
 			}
 
+			scope.placeholder = 'start typing to search...';
+
 		}
 		
 	    return {

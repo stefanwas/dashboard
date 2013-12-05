@@ -1,8 +1,8 @@
-<input type="text" ng-model="filteringText" class="input-text" ng-focus="openDropdown()"/> 
+<input type="text" ng-model="filteringText" class="input-text" ng-focus="openDropdown()" placeholder="{{ placeholder }}"/> 
 
 <div class="filter" ng-show="isActive">
 
-	<input type="checkbox" ng-model="master" ng-change="changeMasterSelection(master)"/>Select all<br />
+	<input type="checkbox" ng-model="master" ng-change="changeMasterSelection(master)" />Select all<br />
 
 	<div ng-repeat="item in collection | filter : filteringText">
 		<input type="checkbox" ng-model="item.selected">{{ item.name }} <br>
