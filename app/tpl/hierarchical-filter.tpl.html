@@ -1,6 +1,6 @@
-<input type="text" ng-model="filteringText" class="input-text" ng-focus="showDropdown=true; bindClickHandler();" ng-init="showDropdown=false"/> 
+<input type="text" ng-model="filteringText" class="input-text" ng-focus="openDropdown()"/> 
 
-<div class="filter" ng-show="showDropdown">
+<div class="filter" ng-show="isActive">
 
 	<input type="checkbox" class="select-all" ng-model="master" ng-change="changeMasterSelection(master)"/>Select all<br />
 	

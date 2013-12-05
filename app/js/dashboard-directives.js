@@ -32,10 +32,21 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 				});
 			}, true);	
 			
+			scope.isActive = false;
+			
+			scope.openDropdown = function () {
+				scope.isActive = true;
+				scope.bindClickHandler();
+			}
+			
+			scope.closeDropdown = function () {
+				scope.isActive = false;
+				scope.unbindClickHandler();
+			}
+			
 			scope.dismissClickHandler = function (event) {
 				if (!utils.isInside(event, element[0])) {
-					scope.showDropdown = false;
-					scope.unbindClickHandler();
+					scope.closeDropdown();
 					scope.$apply();
 				}
 			};
@@ -77,10 +88,21 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 				});
 			}, true);		
 			
+			scope.isActive = false;
+			
+			scope.openDropdown = function () {
+				scope.isActive = true;
+				scope.bindClickHandler();
+			}
+			
+			scope.closeDropdown = function () {
+				scope.isActive = false;
+				scope.unbindClickHandler();
+			}
+			
 			scope.dismissClickHandler = function (event) {
 				if (!utils.isInside(event, element[0])) {
-					scope.showDropdown = false;
-					scope.unbindClickHandler();
+					scope.closeDropdown();
 					scope.$apply();
 				}
 			};
@@ -119,10 +141,21 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 				}
 			};
 			
+			scope.isActive = false;
+			
+			scope.openDropdown = function () {
+				scope.isActive = true;
+				scope.bindClickHandler();
+			}
+			
+			scope.closeDropdown = function () {
+				scope.isActive = false;
+				scope.unbindClickHandler();
+			}
+			
 			scope.dismissClickHandler = function (event) {
 				if (!utils.isInside(event, element[0])) {
-					scope.showDropdown = false;
-					scope.unbindClickHandler();
+					scope.closeDropdown();
 					scope.$apply();
 				}
 			};
