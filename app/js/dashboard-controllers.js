@@ -1,30 +1,14 @@
 /* Controllers */
 
-angular.module('dashboard.controllers', ['ngResource'])
-	.controller('FilterController', function($scope, $resource, $document) {
+angular.module('dashboard.controllers', ['ngResource', 'dashboard.services', 'dashboard.utils'])
+	.controller('FilterController', function($scope, $resource, $document, Filter, utils) {
 
-		$scope.countries = [
-			                   {name: "Europe",
-								selected: true, 
-			                 	items: [
-				                    {name: "England", selected: true}, 
-			                       	{name: "Spain", selected: true},
-									{name: "Germany", selected: true},
-			                     	{name: "Poland", selected: true},
-									{name: "Portugal", selected: false},
-			                     	{name: "Austria", selected: false},
-									{name: "Russia", selected: false}]},
-									
-								{name: "Asia",
-								 selected: false,
-				                 items: [
-									{name: "China", selected: false},
-									{name: "Japan", selected: false},
-									{name: "India", selected: false},
-									{name: "Philipines", selected: false},
-									{name: "Vietnam", selected: false}]
-								}
-			];
+            $scope.countries = undefined;
+
+            Filter.get({filterName: 'countries'}, function (result) {
+                $scope.countries = utils.extendWithChecked(result.filter.items, false);
+            });
+
 			
 			$scope.divisions = [
 			                    {name: "Power Products",
@@ -133,18 +117,7 @@ angular.module('dashboard.controllers', ['ngResource'])
 			                      {name: 'Wyoming', selected: false} 
 			                      ];
 			
-
-			  
-			  $scope.addOrRemove = function (item) {
-				  var index = $scope.allSelected.indexOf(item);
-				  
-				  if (index >= 0) {
-					  $scope.allSelected.splice(index, 1);
-				  } else {
-					  $scope.allSelected.push(item);
-				  }
-			  };
-			  // wywolanie serwisu przyklad:
+    		  // wywolanie serwisu przyklad:
 			  //$scope.phones = Phone.query();
 //			  $scope.phone = Phone.get({phoneId: $routeParams.phoneId}, function(phone) {
 //				    $scope.mainImageUrl = phone.images[0];

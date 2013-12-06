@@ -2,20 +2,24 @@ angular.module('dashboard.utils', [])
 .factory('utils', function() {
 	return {
 		isInside : function(event, elem) {
-			var e = event.target;
+			var domElement = event.target;
 			
-			while (e != null) {
-				if (e == elem) return true;
-				e = e.parentElement;
+			while (domElement != null) {
+				if (domElement == elem) return true;
+				domElement = domElement.parentElement;
 			}
 			
 			return false;
-		}
-	
-//	,
+		},
 
-//		doSomethingElse : function() {
-//			// Do something else here
-//		}
+		extendWithChecked : function(items, checked) {
+            var extendedItems = [];
+
+			for (i=0; i<items.length; i++) {
+                extendedItems.push({'name': items[i], 'checked': checked});
+            }
+
+            return extendedItems;
+		}
 	}
 });
