@@ -91,9 +91,6 @@ dashboardControllers.controller('FilterController', function($scope, Filter, uti
 //			                    {name: "Commissioning support", selected: false}
 //			                    ];
 
-			  $scope.selected = undefined;
-			  
-
 //			  $scope.locations2 = [
 //			                      {name: 'Alabama', selected: false},
 //			                      {name: 'Alaska', selected: false},
@@ -146,8 +143,5 @@ dashboardControllers.controller('FilterController', function($scope, Filter, uti
 //			                      {name: 'Wisconsin', selected: false},
 //			                      {name: 'Wyoming', selected: false}
 //			                      ];
-			
-
-		
 	});
 
