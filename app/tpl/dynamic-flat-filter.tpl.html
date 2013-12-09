@@ -1,8 +1,9 @@
-<input type="text" value="All" ng-model="filteringText" class="input-text" ng-focus="openDropdown()"  />
+<input type="text" value="All" ng-model="filteringText" class="input-text" ng-focus="openDropdown()" ng-change="retrieveItems(filteringText)"  />
 <div>
 	<div class="filter" ng-show="isActive" style="float:left">
 		<ul>
-			<li ng-repeat="item in collection | filter : filteringText | limitTo : 10">
+			<!--<li ng-repeat="item in collection | filter : filteringText | limitTo : 10">-->
+            <li ng-repeat="item in collection">
 				<input type="checkbox" ng-model="item.selected" ng-change="addOrRemove(item.name)">{{ item.name }}
 			</li>
 		</ul>

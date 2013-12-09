@@ -12,11 +12,13 @@ angular.module('dashboard.utils', [])
 			return false;
 		},
 
-		extendWithChecked : function(items, checked) {
+		extendWithChecked : function(items, defaultValue) {
             var extendedItems = [];
 
-			for (i=0; i<items.length; i++) {
-                extendedItems.push({'name': items[i], 'checked': checked});
+            if (items != null) {
+                for (i=0; i<items.length; i++) {
+                    extendedItems.push({'name': items[i], 'selected': defaultValue});
+                }
             }
 
             return extendedItems;

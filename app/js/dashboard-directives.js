@@ -1,6 +1,6 @@
 /* Directives */
 
-angular.module('dashboard.directives', ['dashboard.utils'])
+angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services'])
 	.directive('hierarchicalFilter', ['$document', 'utils', function($document, utils) {
 	
 		function link(scope, element, attrs) {
@@ -22,11 +22,11 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 				angular.forEach(scope.collection, function(group, index) {
 					if (!group.selected) {
 						scope.master = false;
-					};
+					}
 					angular.forEach(group.items, function(item, index) {
 						if (!item.selected) {
 							group.selected = false;
-							scope.master = false;
+							scope.master = false; // fix it
 						}
 					});
 				});
@@ -37,12 +37,12 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 			scope.openDropdown = function () {
 				scope.isActive = true;
 				scope.bindClickHandler();
-			}
+			};
 			
 			scope.closeDropdown = function () {
 				scope.isActive = false;
 				scope.unbindClickHandler();
-			}
+			};
 			
 			scope.dismissClickHandler = function (event) {
 				if (!utils.isInside(event, element[0])) {
@@ -53,7 +53,7 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 			
 			scope.bindClickHandler = function (handler) {
 				$document.on('click', null, scope.dismissClickHandler);	
-			}
+			};
 			
 			scope.unbindClickHandler = function () {
 				$document.off('click', null, scope.dismissClickHandler);
@@ -82,9 +82,8 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 			scope.$watch('collection', function () {
 				angular.forEach(scope.collection, function(item) {
 					if (!item.selected) {
-						scope.master = false;
-						return;
-					};
+						scope.master = false; // fix it
+					}
 				});
 			}, true);		
 			
@@ -93,12 +92,12 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 			scope.openDropdown = function () {
 				scope.isActive = true;
 				scope.bindClickHandler();
-			}
+			};
 			
 			scope.closeDropdown = function () {
 				scope.isActive = false;
 				scope.unbindClickHandler();
-			}
+			};
 			
 			scope.dismissClickHandler = function (event) {
 				if (!utils.isInside(event, element[0])) {
@@ -109,13 +108,13 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 			
 			scope.bindClickHandler = function () {
 				$document.on('click', null, scope.dismissClickHandler);	
-			}
+			};
 			
 			scope.unbindClickHandler = function () {
 				$document.off('click', null, scope.dismissClickHandler);
-			}
+			};
 
-			scope.placeholder = 'start typing to search...';
+			scope.placeholder = 'All';
 
 		}
 		
@@ -127,7 +126,7 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 	    };
 	}])
 	
-	.directive('dynamicFlatFilter', ['$document', 'utils', function($document, utils) {
+	.directive('dynamicFlatFilter', ['$document', 'utils', 'Filter', function($document, utils, Filter) {
 		
 		function link(scope, element, attrs) {
 			
@@ -148,12 +147,12 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 			scope.openDropdown = function () {
 				scope.isActive = true;
 				scope.bindClickHandler();
-			}
+			};
 			
 			scope.closeDropdown = function () {
 				scope.isActive = false;
 				scope.unbindClickHandler();
-			}
+			};
 			
 			scope.dismissClickHandler = function (event) {
 				if (!utils.isInside(event, element[0])) {
@@ -164,12 +163,27 @@ angular.module('dashboard.directives', ['dashboard.utils'])
 			
 			scope.bindClickHandler = function () {
 				$document.on('click', null, scope.dismissClickHandler);	
-			}
+			};
 			
 			scope.unbindClickHandler = function () {
 				$document.off('click', null, scope.dismissClickHandler);
-			}
-			
+			};
+
+            function markSelectedItems(items) {
+                for (i=0; i<items.length; i++) {
+                    if (scope.selectedItems.indexOf(items[i].name) >= 0) {
+                        items[i].selected = true;
+                    }
+                }
+            }
+
+            scope.retrieveItems = function (query) {
+                Filter.get({filterName: 'states', query: scope.filteringText}, function (result) {
+                    scope.collection = utils.extendWithChecked(result.filter.items, false);
+                    markSelectedItems(scope.collection);
+                    console.log('>>> collection size=' + scope.collection.length);
+                });
+            }
 		}
 		
 	    return {
