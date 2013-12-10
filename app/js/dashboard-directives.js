@@ -216,7 +216,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
                     var newGroup = {name: group.name, selected: false, items: [item]};
                     addGroup(newGroup);
                 } else {
-                    var selectedItem = findSelectedItem(group.name, item.name);
+                    var selectedItem = findSelectedItem(selectedGroup, item.name);
                     if (selectedItem == null) {
                         addItemToGroup(selectedGroup, item);
                     } else {
@@ -227,17 +227,19 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
             }
 
             function addOrRemoveGroup (group) {
-
                 var selectedGroup = findSelectedGroup(group.name);
+
                 if (selectedGroup != null) {
                     removeGroup(group)
                     if (!selectedGroup.selected) {
-                        var newGroup = {name: group.name, selected: true, items: group.items};
+                        var newItems = [].concat(group.items);
+                        var newGroup = {name: group.name, selected: true, items: newItems};
                         addGroup(newGroup);
                     }
                 } else {
-                    var newGroup = {name: group.name, selected: true, items: group.items};
-                    addGroup(newGroup)
+                    var newItems = [].concat(group.items);
+                    var newGroup = {name: group.name, selected: true, items: newItems};
+                    addGroup(newGroup);
                 }
             };
 
@@ -256,16 +258,15 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
             }
 
             function addItemToGroup(group, item) {
-                var newItem = {name: item.name, selected: true};
-                group.items.push(newItem);
+                group.items.push(item);
             }
-
 
             function removeItemFromGroup(group, item) {
                 for (i=0; i<group.items.length; i++) {
                     var selectedItem = group.items[i];
                     if (selectedItem.name == item.name) {
                         group.items.splice(i, 1);
+                        group.selected = false;
                         return;
                     }
                 }
@@ -279,13 +280,10 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
                 return null;
             }
 
-            function findSelectedItem (groupName,itemName) {
-                var group = findSelectedGroup(groupName);
-                if (group != null) {
-                    for (i=0; i<group.items.length; i++) {
-                        var item = group.items[i];
-                        if (item.name == itemName) return item;
-                    }
+            function findSelectedItem (group, itemName) {
+                for (i=0; i<group.items.length; i++) {
+                    var item = group.items[i];
+                    if (item.name == itemName) return item;
                 }
                 return null;
             }

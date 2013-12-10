@@ -13,7 +13,6 @@ dashboardServices.factory('Filter', [ '$resource', function($resource) {
             },
             getAll : {
                 method : 'GET',
-//                params : {},
                 isArray : false
             }
 

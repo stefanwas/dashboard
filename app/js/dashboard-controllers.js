@@ -17,8 +17,6 @@ dashboardControllers.controller('FilterController', function($scope, Filter, uti
     });
 
 
-
-
     $scope.countries = [
         {name: "Europe",
             selected: true,
@@ -37,8 +35,27 @@ dashboardControllers.controller('FilterController', function($scope, Filter, uti
                 {name: "China", selected: false},
                 {name: "Japan", selected: false},
                 {name: "India", selected: false},
-                {name: "Philipines", selected: false},
+                {name: "Philippines", selected: false},
                 {name: "Vietnam", selected: false}]
+        },
+        {name: "Africa",
+            selected: false,
+            items: [
+                {name: "Egypt", selected: false},
+                {name: "Libya", selected: false},
+                {name: "Tunisia", selected: false},
+                {name: "Algeria", selected: false},
+                {name: "Niger", selected: false},
+                {name: "Mali", selected: false},
+                {name: "Chad", selected: false},
+                {name: "Nigeria", selected: false},
+                {name: "Morocco", selected: false}]
+        },
+        {name: "Australia",
+            selected: false,
+            items: [
+                {name: "Australia", selected: false},
+                {name: "New Zealand", selected: false}]
         }
     ];
 
