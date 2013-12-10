@@ -3,7 +3,7 @@
 	<div class="filter" ng-show="isActive" style="float:left">
 		<ul>
 			<!--<li ng-repeat="item in collection | filter : filteringText | limitTo : 10">-->
-            <li ng-repeat="item in collection">
+            <li ng-repeat="item in collection | limitTo : 12">
 				<input type="checkbox" ng-model="item.selected" ng-change="addOrRemove(item.name)">{{ item.name }}
 			</li>
 		</ul>
