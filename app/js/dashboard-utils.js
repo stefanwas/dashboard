@@ -17,7 +17,7 @@ angular.module('dashboard.utils', [])
 
             if (items != null) {
                 for (i=0; i<items.length; i++) {
-                    extendedItems.push({'name': items[i], 'selected': defaultValue});
+                    extendedItems.push({'name': items[i], 'selected': defaultValue, 'visibilityClass': 'visible'});
                 }
             }
 

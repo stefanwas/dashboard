@@ -58,7 +58,6 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 			scope.unbindClickHandler = function () {
 				$document.off('click', null, scope.dismissClickHandler);
 			}
-
 		}
 		
 	    return {
@@ -72,7 +71,21 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 	.directive('flatFilter', ['$document', 'utils', function($document, utils) {
 	
 		function link(scope, element, attrs) {
-			
+
+            scope.initPlaceholder = function () {
+                if (scope.master) {
+                    scope.placeholder = 'Type to filter...         (All Selected)';
+                } else {
+                    for (var i=0; i<scope.collection.length; i++) {
+                        if (scope.collection[i].selected) {
+                            scope.placeholder = 'Type to filter...   (Some Selected)';
+                            return;
+                        }
+                    }
+                    scope.placeholder = 'Type to filter...    (None Selected)';
+                }
+            };
+
 			scope.changeMasterSelection = function(selection) {
 				angular.forEach(scope.collection, function(item) {
 					item.selected = selection;
@@ -80,11 +93,13 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 			};
 	
 			scope.$watch('collection', function () {
+
 				angular.forEach(scope.collection, function(item) {
 					if (!item.selected) {
 						scope.master = false; // fix it
 					}
 				});
+                scope.initPlaceholder();
 			}, true);		
 			
 			scope.isActive = false;
@@ -114,8 +129,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 				$document.off('click', null, scope.dismissClickHandler);
 			};
 
-			scope.placeholder = 'All';
-
+            scope.initPlaceholder();
 		}
 		
 	    return {
@@ -133,12 +147,14 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 			scope.selectedItems = [];
 			
 			scope.addOrRemove = function (item) {
-				var index = scope.selectedItems.indexOf(item);
+				var index = findItemIndex(item);
 				
 				if (index >= 0) {
 					scope.selectedItems.splice(index, 1);
+                    item.visibilityClass = 'visible';
 				} else {
 					scope.selectedItems.push(item);
+                    item.visibilityClass = 'hidden';
 				}
 			};
 			
@@ -169,18 +185,34 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 				$document.off('click', null, scope.dismissClickHandler);
 			};
 
+            function findItemIndex(item) {
+                for (var i=0; i<scope.selectedItems.length; i++) {
+                    if (scope.selectedItems[i].name == item.name) return i;
+                }
+                return -1;
+            }
+
             function markSelectedItems(items) {
-                for (i=0; i<items.length; i++) {
-                    if (scope.selectedItems.indexOf(items[i].name) >= 0) {
+                for (var i=0; i<items.length; i++) {
+                    if (findItemIndex(items[i]) >= 0) {
                         items[i].selected = true;
                     }
                 }
             }
 
-            scope.retrieveItems = function (query) { //to rewrite (when moving items from left to right)
-                Filter.get({filterName: 'states', query: scope.filteringText}, function (result) {
+            function hideSelectedItems(items) {
+                for (var i=0; i<items.length; i++) {
+                    if (items[i].selected) {
+                        items[i].visibilityClass = 'hidden';
+                    }
+                }
+            }
+
+            scope.retrieveItems = function (filterName, query) { //to rewrite (when moving items from left to right)
+                Filter.get({filterName: filterName, query: scope.filteringText}, function (result) { //TODO !!!
                     scope.collection = utils.extendWithChecked(result.filter.items, false);
                     markSelectedItems(scope.collection);
+                    hideSelectedItems(scope.collection);
                     console.log('>>> collection size=' + scope.collection.length);
                 });
             }
@@ -188,12 +220,14 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 		
 	    return {
 	        restrict: 'E',
-	        scope: {collection: '='},
+	        scope: {
+                collection: '=',
+                filterName: '@'
+            },
 	        templateUrl: 'tpl/dynamic-flat-filter.tpl.html',
 	        link : link
 	    };		
 	}])
-
 
     .directive('dynamicHierarchicalFilter', ['$document', 'utils', 'Filter', function($document, utils, Filter) {
 
@@ -248,7 +282,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
             }
 
             function removeGroup(group) {
-                for (i=0; i<scope.selectedGroups.length; i++) {
+                for (var i=0; i<scope.selectedGroups.length; i++) {
                     var selectedGroup = scope.selectedGroups[i];
                     if (selectedGroup.name == group.name) {
                         scope.selectedGroups.splice(i, 1);
@@ -262,7 +296,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
             }
 
             function removeItemFromGroup(group, item) {
-                for (i=0; i<group.items.length; i++) {
+                for (var i=0; i<group.items.length; i++) {
                     var selectedItem = group.items[i];
                     if (selectedItem.name == item.name) {
                         group.items.splice(i, 1);
@@ -273,7 +307,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
             }
 
             function findSelectedGroup (groupName) {
-                for (i=0; i<scope.selectedGroups.length; i++) {
+                for (var i=0; i<scope.selectedGroups.length; i++) {
                     var group = scope.selectedGroups[i];
                     if (group.name == groupName) return group;
                 }
@@ -281,7 +315,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
             }
 
             function findSelectedItem (group, itemName) {
-                for (i=0; i<group.items.length; i++) {
+                for (var i=0; i<group.items.length; i++) {
                     var item = group.items[i];
                     if (item.name == itemName) return item;
                 }
@@ -336,7 +370,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 
 //            function markSelectedItems(items) {
 //                for (i=0; i<items.length; i++) {
-//                    if (scope.selectedItems.indexOf(items[i].name) >= 0) {
+//                    if (scope.selectedItemNames.indexOf(items[i].name) >= 0) {
 //                        items[i].selected = true;
 //                    }
 //                }

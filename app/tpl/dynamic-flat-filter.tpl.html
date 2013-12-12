@@ -1,15 +1,18 @@
-<input type="text" value="All" ng-model="filteringText" class="input-text" ng-focus="openDropdown()" ng-change="retrieveItems(filteringText)"  />
+<input type="text" value="All" ng-model="filteringText" class="input-text" ng-focus="openDropdown()" ng-change="retrieveItems(filterName, filteringText)"  />
 <div>
-	<div class="filter" ng-show="isActive" style="float:left">
+	<div class="filter" ng-show="isActive">
 		<ul>
-			<!--<li ng-repeat="item in collection | filter : filteringText | limitTo : 10">-->
-            <li ng-repeat="item in collection | limitTo : 12">
-				<input type="checkbox" ng-model="item.selected" ng-change="addOrRemove(item.name)">{{ item.name }}
+            <li ng-repeat="item in collection | limitTo : 20">
+                <div ng-hide="item.selected" class="animate-show">
+				    <input type="checkbox" ng-model="item.selected" ng-change="addOrRemove(item)">{{ item.name }}
+                </div>
 			</li>
 		</ul>
 	</div>
-	<div ng-show="isActive && selectedItems.length > 0" style="float:left; left: 215px; position: absolute;">
-		<pre><b ng-repeat="selectedItem in selectedItems"> {{ selectedItem }} <br /></b></pre>
+	<div class="filter-selected-items" ng-show="isActive && selectedItems.length > 0">
+		<div ng-repeat="selectedItem in selectedItems">
+            <input type="checkbox" ng-model="selectedItem.selected" ng-change="addOrRemove(selectedItem)"> {{ selectedItem.name }}
+        </div>
 	</div>
 </div>
 

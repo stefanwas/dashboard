@@ -19,7 +19,6 @@
 				<td><flat-filter id="1ct" collection="cardTypes"> </flat-filter></td>
 				<td><flat-filter id="2ca" collection="categories"> </flat-filter></td>
 			</tr>
-			
 		</tbody>
 	</table>
 
@@ -33,19 +32,19 @@
 				<td><hierarchical-filter collection="countries"> </hierarchical-filter></td>
 				<td><hierarchical-filter collection="divisions"> </hierarchical-filter></td>
 			</tr>
-			
 		</tbody>
 	</table>
 
 	<table>
 		<tbody>
 			<tr>
-				<td>Locations</td>
+				<td>SurveyName</td>
+				<td>AccountManager</td>
 			</tr>
 			<tr>
-				<td><dynamic-flat-filter collection="states"> </dynamic-flat-filter></td>
+				<td><dynamic-flat-filter collection="states" filter-name="SurveyName"> </dynamic-flat-filter></td>
+				<td><dynamic-flat-filter collection="accountManagers" filter-name="AccountManager"> </dynamic-flat-filter></td>
 			</tr>
-			
 		</tbody>
 	</table>
 
@@ -53,9 +52,11 @@
 		<tbody>
 			<tr>
 				<td>Countries*</td>
+				<td>Countries*</td>
 			</tr>
 			<tr>
-				<td><dynamic-hierarchical-filter collection="countries"> </dynamic-hierarchical-filter></td>
+				<td><dynamic-hierarchical-filter collection="countries1"> </dynamic-hierarchical-filter></td>
+				<td><dynamic-hierarchical-filter collection="countries2"> </dynamic-hierarchical-filter></td>
 			</tr>
 
 		</tbody>
@@ -81,10 +82,15 @@
 	
 
 	<script src="lib/jquery/jquery-1.10.2.js"></script>
-	
-	<script src="lib/angular/angular-1.2.1.js"></script>
-	<script src="lib/angular/angular-resource.js"></script>
-	
+
+    <script src="lib/angular/angular-1.2.1.js"></script>
+    <script src="lib/angular/angular-resource.js"></script>
+    <!--<script src="lib/angular/angular-animate.min.js"></script>-->
+
+    <!--<script src="lib/angular/1.2.4/angular.min.js"></script>-->
+	<!--<script src="lib/angular/1.2.4/angular-resource.min.js"></script>-->
+	<!--<script src="lib/angular/1.2.4/angular-animate.min.js"></script>-->
+
 <!-- 	<script src="lib/bootstrap/ui-bootstrap-tpls-0.7.0.js"></script> -->
 	
 	<script src="js/dashboard.js"></script>
