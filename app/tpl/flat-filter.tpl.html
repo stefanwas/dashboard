@@ -2,7 +2,7 @@
 
 <div class="filter" ng-show="isActive">
 
-	<input type="checkbox" ng-model="master" ng-change="changeMasterSelection(master)" ng-init="master=true"/>Select all<br />
+	<input type="checkbox" ng-model="master" ng-change="changeMasterSelection(master)" ng-init="master=true"/><b>Select all</b><br />
 
 	<div ng-repeat="item in collection | filter : filteringText">
 		<input type="checkbox" ng-model="item.selected">{{ item.name }} <br>

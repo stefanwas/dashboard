@@ -209,8 +209,8 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
             }
 
             scope.retrieveItems = function (filterName, query) { //to rewrite (when moving items from left to right)
-                Filter.get({filterName: filterName, query: scope.filteringText}, function (result) { //TODO !!!
-                    scope.collection = utils.extendWithChecked(result.filter.items, false);
+                Filter.get({filterName: filterName, query: scope.filteringText}, function (result) {
+                    scope.collection = utils.prepareItemsToDisplay(result.filter.items, false);
                     markSelectedItems(scope.collection);
                     hideSelectedItems(scope.collection);
                     console.log('>>> collection size=' + scope.collection.length);
