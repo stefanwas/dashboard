@@ -74,15 +74,15 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 
             scope.initPlaceholder = function () {
                 if (scope.master) {
-                    scope.placeholder = 'Type to filter...         (All Selected)';
+                    scope.placeholder = 'type to find...         (All Selected)';
                 } else {
                     for (var i=0; i<scope.collection.length; i++) {
                         if (scope.collection[i].selected) {
-                            scope.placeholder = 'Type to filter...   (Some Selected)';
+                            scope.placeholder = 'type to find...   (Some Selected)';
                             return;
                         }
                     }
-                    scope.placeholder = 'Type to filter...    (None Selected)';
+                    scope.placeholder = 'type to find...    (None Selected)';
                 }
             };
 
@@ -143,7 +143,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 	.directive('dynamicFlatFilter', ['$document', 'utils', 'Filter', function($document, utils, Filter) {
 		
 		function link(scope, element, attrs) {
-			
+
 			scope.selectedItems = [];
 			
 			scope.addOrRemove = function (item) {
@@ -157,8 +157,22 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
                     item.visibilityClass = 'hidden';
 				}
 			};
-			
-			scope.isActive = false;
+
+            scope.initPlaceholder = function () {
+                if (scope.selectedItems.length == 0) {
+                    scope.placeholder = 'unspecified';
+                } else if (scope.selectedItems.length == 1) {
+                    scope.placeholder = '1 item selected';
+                } else {
+                    scope.placeholder = scope.selectedItems.length + ' items selected';
+                }
+            };
+
+            scope.$watch('collection', function () {
+                scope.initPlaceholder();
+            }, true);
+
+            scope.isActive = false;
 			
 			scope.openDropdown = function () {
 				scope.isActive = true;
@@ -210,12 +224,13 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 
             scope.retrieveItems = function (filterName, query) { //to rewrite (when moving items from left to right)
                 Filter.get({filterName: filterName, query: scope.filteringText}, function (result) {
-                    scope.collection = utils.prepareItemsToDisplay(result.filter.items, false);
+                    scope.collection = utils.prepareItemsToDisplay(result.items, false);
                     markSelectedItems(scope.collection);
                     hideSelectedItems(scope.collection);
                     console.log('>>> collection size=' + scope.collection.length);
                 });
             }
+            scope.initPlaceholder();
 		}
 		
 	    return {
@@ -244,6 +259,11 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
             }
 
             function addOrRemoveItem (group, item) {
+
+                if (!item.selected) {
+                    group.selected = false;
+                }
+
                 var selectedGroup = findSelectedGroup(group.name);
 
                 if (selectedGroup == null) {
@@ -262,6 +282,10 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 
             function addOrRemoveGroup (group) {
                 var selectedGroup = findSelectedGroup(group.name);
+
+                angular.forEach(group.items, function (item) {
+                   item.selected = group.selected;
+                });
 
                 if (selectedGroup != null) {
                     removeGroup(group)
@@ -322,24 +346,6 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
                 return null;
             }
 
-            // group selection
-            scope.changeGroupSelection = function(group) {
-                angular.forEach(group.items, function(item, index) {
-                    item.selected = group.selected;
-                });
-            };
-
-            scope.$watch('collection', function () {
-                angular.forEach(scope.collection, function(group, index) {
-                    angular.forEach(group.items, function(item, index) {
-                        if (!item.selected) {
-                            group.selected = false; // fix it
-                        }
-                    });
-                });
-            }, true);
-
-
             // hide & show dropdown
             scope.isActive = false;
 
@@ -368,43 +374,62 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
                 $document.off('click', null, scope.dismissClickHandler);
             };
 
-//            function markSelectedItems(items) {
-//                for (i=0; i<items.length; i++) {
-//                    if (scope.selectedItemNames.indexOf(items[i].name) >= 0) {
-//                        items[i].selected = true;
-//                    }
-//                }
-//            }
+            //////
 
-//            scope.retrieveItems = function (query) {
-//                Filter.get({filterName: 'states', query: scope.filteringText}, function (result) {
-//                    scope.collection = utils.extendWithChecked(result.filter.items, false);
-//                    markSelectedItems(scope.collection);
-//                    console.log('>>> collection size=' + scope.collection.length);
-//                });
-//            }
+            function findItemIndex(item, items) {
+                for (var i=0; i<items.length; i++) {
+                    if (items[i].name == item.name) {
+                        return i;
+                    }
+                }
+                return -1;
+            }
+
+            function findGroupIndex(group) {
+                for (var i=0; i<scope.selectedGroups.length; i++) {
+                    if (scope.selectedGroups[i].name == group.name) {
+                        return i;
+                    }
+                }
+                return -1;
+            }
+
+            function markSelectedItems(groups) {
+                angular.forEach(groups, function (group) {
+                    var selectedGroupIdx = findGroupIndex(group);
+                    if (selectedGroupIdx >= 0) {
+                        group.selected = scope.selectedGroups[selectedGroupIdx].selected;
+                        angular.forEach(group.items, function (item) {
+                            if (findItemIndex(item, scope.selectedGroups[selectedGroupIdx].items) >= 0) {
+                                item.selected = true;
+                            }
+                        })
+                    }
+                })
+            }
+
+            scope.retrieveItems = function (filterName, query) { //to rewrite (when moving items from left to right)
+                Filter.get({filterName: filterName, query: query}, function (result) {
+                    scope.collection = utils.prepareGroupsToDisplay(result.groups, false);
+                    markSelectedItems(scope.collection);
+                    console.log('>>> collection size=' + scope.collection.length);
+                });
+            }
+
         }
 
         return {
             restrict: 'E',
-            scope: {collection: '='},
+            scope: {
+                collection: '=',
+                filterName: '@'
+            },
             templateUrl: 'tpl/dynamic-hierarchical-filter.tpl.html',
             link : link
         };
-    }])
+    }]);
 	
-	.directive('autoComplete', function($timeout) {
-		return function(scope, element, attrs) {
-			element.autocomplete({
-				source : scope[attrs.uiItems],
-				select : function() {
-					$timeout(function() {
-						element.trigger('input');
-					}, 0);
-				}
-			});
-		};
-	});
+
 	
 	
 

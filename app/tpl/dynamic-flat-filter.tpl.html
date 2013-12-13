@@ -1,4 +1,5 @@
-<input type="text" value="All" ng-model="filteringText" class="input-text" ng-focus="openDropdown()" ng-change="retrieveItems(filterName, filteringText)"  />
+<input type="text" value="All" ng-model="filteringText" class="input-text" ng-focus="openDropdown()" ng-blur="filteringText=''"
+       ng-change="retrieveItems(filterName, filteringText)" placeholder="{{ placeholder }}"/>
 <div>
 	<div class="filter" ng-show="isActive">
 		<ul>

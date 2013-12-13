@@ -9,6 +9,8 @@
 </head>
 <body ng-controller="FilterController" >
 
+    <!-- static flat filters -->
+    <h2>static & flat filters</h2>
 	<table>
 		<tbody>
 			<tr>
@@ -16,53 +18,67 @@
 				<td>Account Type</td>
 				<td>Industry</td>
 				<td>Year</td>
+				<td>Category</td>
 			</tr>
 			<tr>
 				<td><flat-filter collection="jobFunctions"></flat-filter></td>
 				<td><flat-filter collection="accountTypes"></flat-filter></td>
 				<td><flat-filter collection="industries"></flat-filter></td>
 				<td><flat-filter collection="years"></flat-filter></td>
+				<td><flat-filter collection="categories"></flat-filter></td>
 			</tr>
 		</tbody>
 	</table>
 
+    <!-- static hierarchical filters -->
+    <h2>static & hierarchical filters</h2>
 	<table>
 		<tbody>
 			<tr>
 				<td>Group of Product</td>
-				<td>ABB Division / BU*</td>
+				<td>RegionCountry</td>
+				<td>ABB Division / BU</td>
 			</tr>
 			<tr>
 				<td><hierarchical-filter collection="groupOfProducts"> </hierarchical-filter></td>
-				<td><hierarchical-filter collection="divisions"> </hierarchical-filter></td>
+				<td><hierarchical-filter collection="regionCountries"> </hierarchical-filter></td>
+				<td><hierarchical-filter collection="abbDivisionBUs"> </hierarchical-filter></td>
 			</tr>
 		</tbody>
 	</table>
 
+    <!-- dynamic flat filters -->
+    <h2>dynamic & flat filters</h2>
 	<table>
 		<tbody>
 			<tr>
 				<td>SurveyName</td>
 				<td>AccountManager</td>
+				<td>LocalBusinessManager</td>
+				<td>SurveyDesigner</td>
 				<!--<td>City</td>-->
 			</tr>
 			<tr>
-				<td><dynamic-flat-filter collection="states" filter-name="SurveyName"> </dynamic-flat-filter></td>
+				<td><dynamic-flat-filter collection="surveyNames" filter-name="SurveyName"> </dynamic-flat-filter></td>
 				<td><dynamic-flat-filter collection="accountManagers" filter-name="AccountManager"> </dynamic-flat-filter></td>
+				<td><dynamic-flat-filter collection="localBusinessManagers" filter-name="LocalBusinessManager"> </dynamic-flat-filter></td>
+				<td><dynamic-flat-filter collection="surveyDesigners" filter-name="SurveyDesigner"> </dynamic-flat-filter></td>
 				<!--<td><dynamic-flat-filter collection="cities" filter-name="City"> </dynamic-flat-filter></td>-->
 			</tr>
 		</tbody>
 	</table>
 
+    <!-- test / dynamic hierarchical filters -->
+    <h2>dynamic & hierarchical filters</h2>
 	<table>
 		<tbody>
 			<tr>
-				<td>Countries*</td>
-				<td>Countries*</td>
+				<!--<td>Countries*</td>-->
+                <td>Customer Account*</td>
 			</tr>
 			<tr>
-				<td><dynamic-hierarchical-filter collection="countries1"> </dynamic-hierarchical-filter></td>
-				<td><dynamic-hierarchical-filter collection="countries2"> </dynamic-hierarchical-filter></td>
+				<!--<td><dynamic-hierarchical-filter collection="countries1"> </dynamic-hierarchical-filter></td>-->
+                <td><dynamic-hierarchical-filter collection="customerAccounts" filter-name="CustomerAccount"> </dynamic-hierarchical-filter></td>
 			</tr>
 
 		</tbody>
@@ -89,16 +105,14 @@
 
 	<script src="lib/jquery/jquery-1.10.2.js"></script>
 
-    <!--<script src="lib/angular/angular-1.2.1.js"></script>-->
-    <!--<script src="lib/angular/angular-resource.js"></script>-->
-    <!--<script src="lib/angular/angular-animate.min.js"></script>-->
+    <!--<script src="lib/angular/1.2.1/angular-1.2.1.js"></script>-->
+    <!--<script src="lib/angular/1.2.1/angular-resource-1.2.1.js"></script>-->
+    <!--<script src="lib/angular/1.2.1/angular-animate-1.2.1.js"></script>-->
 
     <script src="lib/angular/1.2.4/angular.min.js"></script>
 	<script src="lib/angular/1.2.4/angular-resource.min.js"></script>
 	<script src="lib/angular/1.2.4/angular-animate.min.js"></script>
 
-<!-- 	<script src="lib/bootstrap/ui-bootstrap-tpls-0.7.0.js"></script> -->
-	
 	<script src="js/dashboard.js"></script>
 	<script src="js/dashboard-controllers.js"></script>
 	<script src="js/dashboard-directives.js"></script>

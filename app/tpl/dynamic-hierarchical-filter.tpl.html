@@ -1,4 +1,4 @@
-<input type="text" value="All" ng-model="filteringText" class="input-text" ng-focus="openDropdown()" ng-change="retrieveItems(filteringText)"  />
+<input type="text" value="All" ng-model="filteringText" class="input-text" ng-focus="openDropdown()" ng-change="retrieveItems(filterName, filteringText)"  />
 <div>
     <div class="filter" ng-show="isActive" style="float:left;">
         <div ng-repeat="group in collection" ng-init="extend = false">
@@ -6,17 +6,18 @@
             <img alt="Extend" src="img/sq_plus_icon25.png" ng-click="extend = true" ng-hide="extend" />
             <img alt="Collapse" src="img/sq_minus_icon25.png" ng-click="extend = false" ng-show="extend" />
 
-            <input type="checkbox" ng-model="group.selected"  ng-change="changeGroupSelection(group); addOrRemove(group)">{{ group.name }} <br>
+            <input type="checkbox" ng-model="group.selected"  ng-change="changeGroupSelection(group); addOrRemove(group)">{{ group.name }}<br>
 
             <div class="filter-item" ng-repeat="item in group.items" ng-show="extend">
                 <input type="checkbox" ng-model="item.selected" ng-change="addOrRemove(group, item)">{{ item.name }} <br>
             </div>
         </div>
     </div>
+
     <div class="filter-selected-items" ng-show="isActive && selectedGroups.length > 0">
         <div ng-repeat="selectedGroup in selectedGroups"><b> {{ selectedGroup.name }} </b>
             <ul>
-                <li ng-repeat="selectedItem in selectedGroup.items"> > {{ selectedItem.name }}</li>
+                <li ng-repeat="selectedItem in selectedGroup.items"> -> {{ selectedItem.name }}</li>
             </ul>
         </div>
     </div>

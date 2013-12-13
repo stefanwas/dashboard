@@ -62,7 +62,7 @@ dashboardMockdata.factory('MockData', function () {
         getCountries : function () {
             return [
                 {name: "Europe",
-                    selected: true,
+                    selected: false,
                     items: [
                         {name: "England", selected: false},
                         {name: "Spain", selected: false},
