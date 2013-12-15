@@ -8,17 +8,20 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body ng-controller="FilterController" >
-
+<div ng-click="closeAll()" >
     <!-- static flat filters -->
-    <h2>static & flat filters</h2>
+    <!-- <h2>static & flat filters</h2> -->
 	<table>
+		<thead>
+		</thead>
 		<tbody>
 			<tr>
-				<td>Job Function</td>
-				<td>Account Type</td>
-				<td>Industry</td>
-				<td>Year</td>
-				<td>Category</td>
+				<th>Job Function</th>
+				<th>Account Type</th>
+				<th>Industry</th>
+				<th>Year</th>
+				<th>Category</th>
+				<th>States 2*</th>
 			</tr>
 			<tr>
 				<td><flat-filter collection="jobFunctions"></flat-filter></td>
@@ -26,18 +29,19 @@
 				<td><flat-filter collection="industries"></flat-filter></td>
 				<td><flat-filter collection="years"></flat-filter></td>
 				<td><flat-filter collection="categories"></flat-filter></td>
+				<td><flat-filter collection="states2"></flat-filter></td>
 			</tr>
 		</tbody>
 	</table>
 
     <!-- static hierarchical filters -->
-    <h2>static & hierarchical filters</h2>
+    <!-- <h2>static & hierarchical filters</h2> -->
 	<table>
 		<tbody>
 			<tr>
-				<td>Group of Product</td>
-				<td>RegionCountry</td>
-				<td>ABB Division / BU</td>
+				<th>Group of Product</th>
+				<th>RegionCountry</th>
+				<th>ABB Division / BU</th>
 			</tr>
 			<tr>
 				<td><hierarchical-filter collection="groupOfProducts"> </hierarchical-filter></td>
@@ -48,36 +52,38 @@
 	</table>
 
     <!-- dynamic flat filters -->
-    <h2>dynamic & flat filters</h2>
+    <!-- <h2>dynamic & flat filters</h2> -->
 	<table>
 		<tbody>
 			<tr>
-				<td>SurveyName</td>
-				<td>AccountManager</td>
-				<td>LocalBusinessManager</td>
-				<td>SurveyDesigner</td>
-				<!--<td>City</td>-->
+				<th>SurveyName</th>
+				<th>AccountManager</th>
+				<th>LocalBusinessManager</th>
+				<th>SurveyDesigner</th>
+				<th>States</th>
+				<!--<th>City</th>-->
 			</tr>
 			<tr>
 				<td><dynamic-flat-filter collection="surveyNames" filter-name="SurveyName"> </dynamic-flat-filter></td>
 				<td><dynamic-flat-filter collection="accountManagers" filter-name="AccountManager"> </dynamic-flat-filter></td>
 				<td><dynamic-flat-filter collection="localBusinessManagers" filter-name="LocalBusinessManager"> </dynamic-flat-filter></td>
 				<td><dynamic-flat-filter collection="surveyDesigners" filter-name="SurveyDesigner"> </dynamic-flat-filter></td>
+				<td><dynamic-flat-filter collection="states" filter-name="States"> </dynamic-flat-filter></td>
 				<!--<td><dynamic-flat-filter collection="cities" filter-name="City"> </dynamic-flat-filter></td>-->
 			</tr>
 		</tbody>
 	</table>
 
     <!-- test / dynamic hierarchical filters -->
-    <h2>dynamic & hierarchical filters</h2>
+    <!-- <h2>dynamic & hierarchical filters</h2> -->
 	<table>
 		<tbody>
 			<tr>
-				<!--<td>Countries*</td>-->
-                <td>Customer Account*</td>
+				<th>Countries*</th>
+                <th>Customer Account*</th>
 			</tr>
 			<tr>
-				<!--<td><dynamic-hierarchical-filter collection="countries1"> </dynamic-hierarchical-filter></td>-->
+				<td><dynamic-hierarchical-filter collection="countries1"> </dynamic-hierarchical-filter></td>
                 <td><dynamic-hierarchical-filter collection="customerAccounts" filter-name="CustomerAccount"> </dynamic-hierarchical-filter></td>
 			</tr>
 
@@ -101,22 +107,21 @@
 	<span>---------------------------------------</span>
 	<br/> -->
 	<br/>
-	
+	</div>
 
 	<script src="lib/jquery/jquery-1.10.2.js"></script>
-
-    <!--<script src="lib/angular/1.2.1/angular-1.2.1.js"></script>-->
-    <!--<script src="lib/angular/1.2.1/angular-resource-1.2.1.js"></script>-->
-    <!--<script src="lib/angular/1.2.1/angular-animate-1.2.1.js"></script>-->
 
     <script src="lib/angular/1.2.4/angular.min.js"></script>
 	<script src="lib/angular/1.2.4/angular-resource.min.js"></script>
 	<script src="lib/angular/1.2.4/angular-animate.min.js"></script>
+	<script src="lib/angular/1.2.4/angular-sanitize.min.js"></script>
 
 	<script src="js/dashboard.js"></script>
 	<script src="js/dashboard-controllers.js"></script>
 	<script src="js/dashboard-directives.js"></script>
 	<script src="js/dashboard-services.js"></script>
 	<script src="js/dashboard-utils.js"></script>
+	<script src="js/dashboard-filters.js"></script>
 	<script src="js/dashboard-mockdata.js"></script>
+	
 </body>

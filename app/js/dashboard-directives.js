@@ -74,15 +74,15 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 
             scope.initPlaceholder = function () {
                 if (scope.master) {
-                    scope.placeholder = 'type to find...         (All Selected)';
+                    scope.placeholder = 'type to find...           (all selected)';
                 } else {
                     for (var i=0; i<scope.collection.length; i++) {
                         if (scope.collection[i].selected) {
-                            scope.placeholder = 'type to find...   (Some Selected)';
+                            scope.placeholder = 'type to find...     (some selected)';
                             return;
                         }
                     }
-                    scope.placeholder = 'type to find...    (None Selected)';
+                    scope.placeholder = 'type to find...      (none selected)';
                 }
             };
 
@@ -134,7 +134,10 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 		
 	    return {
 	        restrict: 'E',
-	        scope: {collection: '='},
+	        scope: {
+	        	collection: '=',
+	        	filterName: '@'
+	        },
 	        templateUrl: 'tpl/flat-filter.tpl.html',
 	        link : link
 	    };

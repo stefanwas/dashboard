@@ -1,6 +1,9 @@
 /* Controllers */
 
-var dashboardControllers = angular.module('dashboard.controllers', ['dashboard.services', 'dashboard.utils', 'dashboard.mockdata']);
+var dashboardControllers = angular.module('dashboard.controllers', 
+		['dashboard.services', 
+		 'dashboard.utils', 
+		 'dashboard.mockdata']);
 
 dashboardControllers.controller('FilterController', function($scope, Filter, utils, MockData) {
 
@@ -69,12 +72,12 @@ dashboardControllers.controller('FilterController', function($scope, Filter, uti
     });
 
 
-
     // test filters
+    $scope.states = MockData.getStates();
+    $scope.states2 = MockData.getStates();
     $scope.countries1 = MockData.getCountries();
     $scope.countries2 = MockData.getCountries();
     $scope.divisions = MockData.getDivisions();
-
 
 });
 
