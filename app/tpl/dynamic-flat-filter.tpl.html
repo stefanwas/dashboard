@@ -5,14 +5,15 @@
 		<ul>
             <li ng-repeat="item in collection | limitTo : 20">
                 <div ng-hide="item.selected" class="animate-show">
-				    <input type="checkbox" ng-model="item.selected" ng-change="addOrRemove(item)">{{ item.name }}
+				    <input type="checkbox" ng-model="item.selected" ng-change="addOrRemove(item)"/>
+                    <span ng-bind-html="item.name | highlightFilter : filteringText"></span>
                 </div>
 			</li>
 		</ul>
 	</div>
 	<div class="filter-selected-items" ng-show="isActive && selectedItems.length > 0">
 		<div ng-repeat="selectedItem in selectedItems">
-            <input type="checkbox" ng-model="selectedItem.selected" ng-change="addOrRemove(selectedItem)"> {{ selectedItem.name }}
+            <input type="checkbox" ng-model="selectedItem.selected" ng-change="addOrRemove(selectedItem)"/> {{ selectedItem.name }}
         </div>
 	</div>
 </div>
