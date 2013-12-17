@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="dashboard">
+<head>
+    <title>Management Dashboard</title>
+    <!-- <link rel="stylesheet" type="text/css" href="css/bootstrap.css" /> -->
+    <link rel="stylesheet" type="text/css" href="css/dashboard.css"/>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body ng-controller="FilterController">
+<div ng-click="closeAll()">
+
+    <table>
+        <thead>
+        </thead>
+        <tbody>
+        <tr>
+            <th>Job Function<sup>[SF]</sup></th>
+            <th>Account Type<sup>[SF]</sup></th>
+            <th>Industry<sup>[SF]</sup></th>
+            <th>Year<sup>[SF]</sup></th>
+            <th>Category<sup>[SF]</sup></th>
+        </tr>
+        <tr>
+            <td><flat-filter collection="jobFunctions"></flat-filter></td>
+            <td><flat-filter collection="accountTypes"></flat-filter></td>
+            <td><flat-filter collection="industries"></flat-filter></td>
+            <td><flat-filter collection="years"></flat-filter></td>
+            <td><flat-filter collection="categories"></flat-filter></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table>
+        <tbody>
+        <tr>
+            <th style="color: red">Card Type<sup>[SF]</sup></th>
+            <th style="color: red">Net Promoter Type<sup>[SF]</sup></th>
+            <th style="color: red">Customer Type<sup>[SF]</sup></th>
+            <th>Group of Products / Product<sup>[SH]</sup></th>
+            <th>Region / Country<sup>[SH]</sup></th>
+        </tr>
+        <tr>
+            <td><flat-filter collection="cardTypes"></flat-filter></td>
+            <td><flat-filter collection="netPromoterTypes"></flat-filter></td>
+            <td><flat-filter collection="customerTypes"></flat-filter></td>
+            <td><hierarchical-filter collection="groupOfProducts"></hierarchical-filter></td>
+            <td><hierarchical-filter collection="regionCountries"></hierarchical-filter></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table>
+        <tbody>
+        <tr>
+            <th>ABB Division / BU<sup>[SH]</sup></th>
+            <th style="color: red">Survey Type<sup>[SH]</sup></th>
+            <th>Survey Name<sup>[DF]</sup></th>
+            <th>Account Manager<sup>[DF]</sup></th>
+            <th>Local Business Manager<sup>[DF]</sup></th>
+        </tr>
+        <tr>
+            <td><hierarchical-filter collection="abbDivisionBUs"></hierarchical-filter></td>
+            <td><hierarchical-filter collection="surveyTypes"></hierarchical-filter></td>
+            <td><dynamic-flat-filter collection="surveyNames" filter-name="SurveyName"></dynamic-flat-filter></td>
+            <td><dynamic-flat-filter collection="accountManagers" filter-name="AccountManager"></dynamic-flat-filter></td>
+            <td><dynamic-flat-filter collection="localBusinessManagers" filter-name="LocalBusinessManager"></dynamic-flat-filter></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table>
+        <tbody>
+        <tr>
+            <!--<th>Countries*</th>-->
+            <th>Survey Designer<sup>[DF]</sup></th>
+            <th style="color: red">City<sup>[DF]</sup></th>
+            <th style="color: red">Respondent Name<sup>[DF]</sup></th>
+            <th style="color: red">Customer Division<sup>[DF]</sup></th>
+            <th>Customer Account<sup>[DH]</sup></th>
+        </tr>
+        <tr>
+            <!--<td><dynamic-hierarchical-filter collection="countries1"></dynamic-hierarchical-filter></td>-->
+            <td><dynamic-flat-filter collection="surveyDesigners" filter-name="SurveyDesigner"></dynamic-flat-filter></td>
+            <td><dynamic-flat-filter collection="cities" filter-name="City"> </dynamic-flat-filter></td>
+            <td><dynamic-flat-filter collection="respondentNames" filter-name="RespondentName"> </dynamic-flat-filter></td>
+            <td><dynamic-flat-filter collection="customerDivisions" filter-name="CustomerDivision"> </dynamic-flat-filter></td>
+            <td><dynamic-hierarchical-filter collection="customerAccounts" filter-name="CustomerAccount"></dynamic-hierarchical-filter></td>
+        </tr>
+        </tbody>
+    </table>
+    <div style="height: 30px; width: 10px;">
+
+    </div>
+    <div style="width: 1145px;">
+    <table style="float: right">
+        <tbody>
+        <tr>
+            <td style="vertical-align: middle; padding-right: 5px;">Divide by</td>
+            <td style="vertical-align: middle; padding-right: 15px;">
+                <select>
+                    <option value="">(none)</option>
+                    <option value="">Year</option>
+                    <option value="">Job Function</option>
+                    <option value="">Account Type</option>
+                    <option value="">Industry</option>
+                    <option value="">Category</option>
+                    <option value="">Card Type</option>
+                    <option value="">Net Promoter Type</option>
+                    <option value="">Product</option>
+                    <option value="">Group of Products</option>
+                    <option value="">Region</option>
+                    <option value="">Country</option>
+                    <option value="">City</option>
+                    <option value="">ABB Division / BU</option>
+                    <option value="">Survey Type</option>
+                    <option value="">Survey Name</option>
+                    <option value="">Survey Designer</option>
+                    <option value="">Account Manager</option>
+                    <option value="">Local Business Manager</option>
+                    <option value="">Respondent Name</option>
+                    <option value="">Customer Type</option>
+                    <option value="">Customer Division</option>
+                    <option value="">Customer Account</option>
+                </select>
+            </td>
+            <td style="vertical-align: middle; padding-right: 10px;"><input type="radio" name="reportType" checked/>Data</td>
+            <td style="vertical-align: middle; padding-right: 10px;"><input type="radio" name="reportType"/>Chart</td>
+            <td><button type="button">Generate Report</button> </td>
+
+        </tr>
+        </tbody>
+
+    </table>
+    </div>
+
+
+    <br/>
+</div>
+
+<script src="lib/jquery/jquery-1.10.2.js"></script>
+
+<script src="lib/angular/1.2.4/angular.min.js"></script>
+<script src="lib/angular/1.2.4/angular-resource.min.js"></script>
+<script src="lib/angular/1.2.4/angular-animate.min.js"></script>
+<script src="lib/angular/1.2.4/angular-sanitize.min.js"></script>
+
+<script src="js/dashboard.js"></script>
+<script src="js/dashboard-controllers.js"></script>
+<script src="js/dashboard-directives.js"></script>
+<script src="js/dashboard-services.js"></script>
+<script src="js/dashboard-utils.js"></script>
+<script src="js/dashboard-filters.js"></script>
+<script src="js/dashboard-mockdata.js"></script>
+
+</body>

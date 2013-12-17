@@ -34,6 +34,26 @@ li {
 	margin: 1px 0px; 
 }
 
+button {
+    background: #000000;
+    font-size: 14px;
+    /*font-weight: bold;*/
+    color: white;
+    width: 150px;
+    height: 27px;
+    -webkit-border-radius : 4px;
+       -moz-border-radius : 4px;
+            border-radius : 4px;
+}
+
+select {
+    font-size: 14px;
+    width: 180px;
+    height: 25px;
+    -webkit-border-radius : 4px;
+    -moz-border-radius : 4px;
+    border-radius : 4px;
+}
 	
 .input-text {
 	width: 215px;
@@ -114,7 +134,7 @@ li {
 
 .super-class {
    font-weight: bold;
-    color: red;
+    /*color: red;*/
 }
 
 
