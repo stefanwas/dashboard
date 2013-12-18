@@ -6,7 +6,7 @@
             <li ng-repeat="item in collection | limitTo : 20">
                 <div ng-hide="item.selected" class="animate-show">
 				    <input type="checkbox" ng-model="item.selected" ng-change="addOrRemove(item)"/>
-                    <span ng-bind-html="item.name | highlightFilter : filteringText"></span>
+                    <span ng-bind-html="item.name | highlightMatcher : filteringText"></span>
                 </div>
 			</li>
 		</ul>

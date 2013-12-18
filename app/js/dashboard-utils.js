@@ -19,12 +19,19 @@ angular.module('dashboard.utils', [])
             var groupsToDisplay = [];
             if (groups != null) {
                 angular.forEach(groups, function (group) {
-                    groupsToDisplay.push({
+
+                    var preparedGroup = {
                         name: group.name,
                         selected: defaultValue,
-                        visible: true,
-                        items: prepareItemsToDisplay(group.items, defaultValue)
-                    });
+                        expand: false,
+                        visible: true
+                    };
+
+                    var preparedItems = prepareItemsToDisplay(group.items, defaultValue);
+
+                    preparedGroup.items = preparedItems;
+                    angular.forEach(preparedItems, function (item) { item.groupRef = preparedGroup; });
+                    groupsToDisplay.push(preparedGroup);
                 });
             }
             return groupsToDisplay;
@@ -34,7 +41,7 @@ angular.module('dashboard.utils', [])
 		isInside : function(event, elem) {
 			var domElement = event.target;
 			while (domElement != null) {
-				if (domElement == elem || domElement.$$NG_REMOVED) {
+				if (domElement == elem || domElement.$$NG_REMOVED) { //TODO refactor & redesing this
 					return true;
 				} else {
 					domElement = domElement.parentElement;

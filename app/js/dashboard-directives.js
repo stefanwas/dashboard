@@ -1,37 +1,104 @@
 /* Directives */
 
 angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services'])
+
+    .directive('flatFilter', ['$document', 'utils', function($document, utils) {
+        function link(scope, element, attrs) {
+
+            scope.initPlaceholder = function () {
+                if (scope.master) {
+                    scope.placeholder = 'all selected';
+                } else {
+                    for (var i=0; i<scope.collection.length; i++) {
+                        if (scope.collection[i].selected) {
+                            scope.placeholder = 'some selected';
+                            return;
+                        }
+                    }
+                    scope.placeholder = 'none selected';
+                }
+            };
+
+            scope.changeMasterSelection = function(selection) {
+                angular.forEach(scope.collection, function(item) { item.selected = selection; });
+            };
+
+            scope.changeItemSelection = function(item) {
+                if (!item.selected) { scope.master = false; }
+            }
+
+            scope.isActive = false;
+
+            scope.openDropdown = function () {
+                scope.isActive = true;
+                scope.bindClickHandler();
+            };
+
+            scope.closeDropdown = function () {
+                scope.isActive = false;
+                scope.unbindClickHandler();
+            };
+
+            scope.dismissClickHandler = function (event) {
+                if (!utils.isInside(event, element[0])) {
+                    scope.closeDropdown();
+                    scope.$apply();
+                }
+            };
+
+            scope.bindClickHandler = function () {
+                $document.on('click', null, scope.dismissClickHandler);
+            };
+
+            scope.unbindClickHandler = function () {
+                $document.off('click', null, scope.dismissClickHandler);
+            };
+
+            scope.initPlaceholder();
+        }
+
+        return {
+            restrict: 'E',
+            scope: {
+                collection: '=',
+                filterName: '@'
+            },
+            templateUrl: 'tpl/flat-filter.tpl.html',
+            link : link
+        };
+    }])
+
 	.directive('hierarchicalFilter', ['$document', 'utils', function($document, utils) {
-	
 		function link(scope, element, attrs) {
 			
 			scope.changeMasterSelection = function(selection) {
-				angular.forEach(scope.collection, function(group, index) {
+				angular.forEach(scope.collection, function(group) {
 					group.selected = selection;
 					scope.changeGroupSelection(group);
 				});
 			};
 	
 			scope.changeGroupSelection = function(group) {
-				angular.forEach(group.items, function(item, index) {
+                if (!group.selected) {
+                    scope.master = false;
+                }
+				angular.forEach(group.items, function(item) {
 					item.selected = group.selected;
 				});
 			};
-			
-			scope.$watch('collection', function () {
-				angular.forEach(scope.collection, function(group, index) {
-					if (!group.selected) {
-						scope.master = false;
-					}
-					angular.forEach(group.items, function(item, index) {
-						if (!item.selected) {
-							group.selected = false;
-							scope.master = false; // fix it
-						}
-					});
-				});
-			}, true);	
-			
+
+            scope.changeItemSelection = function(item) {
+                if (!item.selected) {
+                    item.groupRef.selected = false;
+                    scope.master = false;
+                }
+            }
+
+            scope.expandAll = function (query) {
+                var expand = query != "";
+                angular.forEach(scope.collection, function(group) { group.expand = expand; });
+            }
+
 			scope.isActive = false;
 			
 			scope.openDropdown = function () {
@@ -67,81 +134,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 	        link : link
 	    };
 	}])
-	
-	.directive('flatFilter', ['$document', 'utils', function($document, utils) {
-	
-		function link(scope, element, attrs) {
 
-            scope.initPlaceholder = function () {
-                if (scope.master) {
-                    scope.placeholder = 'type to find...           (all selected)';
-                } else {
-                    for (var i=0; i<scope.collection.length; i++) {
-                        if (scope.collection[i].selected) {
-                            scope.placeholder = 'type to find...     (some selected)';
-                            return;
-                        }
-                    }
-                    scope.placeholder = 'type to find...      (none selected)';
-                }
-            };
-
-			scope.changeMasterSelection = function(selection) {
-				angular.forEach(scope.collection, function(item) {
-					item.selected = selection;
-				});
-			};
-	
-			scope.$watch('collection', function () {
-
-				angular.forEach(scope.collection, function(item) {
-					if (!item.selected) {
-						scope.master = false; // fix it
-					}
-				});
-                scope.initPlaceholder();
-			}, true);		
-			
-			scope.isActive = false;
-			
-			scope.openDropdown = function () {
-				scope.isActive = true;
-				scope.bindClickHandler();
-			};
-			
-			scope.closeDropdown = function () {
-				scope.isActive = false;
-				scope.unbindClickHandler();
-			};
-			
-			scope.dismissClickHandler = function (event) {
-				if (!utils.isInside(event, element[0])) {
-					scope.closeDropdown();
-					scope.$apply();
-				}
-			};
-			
-			scope.bindClickHandler = function () {
-				$document.on('click', null, scope.dismissClickHandler);	
-			};
-			
-			scope.unbindClickHandler = function () {
-				$document.off('click', null, scope.dismissClickHandler);
-			};
-
-            scope.initPlaceholder();
-		}
-		
-	    return {
-	        restrict: 'E',
-	        scope: {
-	        	collection: '=',
-	        	filterName: '@'
-	        },
-	        templateUrl: 'tpl/flat-filter.tpl.html',
-	        link : link
-	    };
-	}])
 	
 	.directive('dynamicFlatFilter', ['$document', 'utils', 'Filter', function($document, utils, Filter) {
 		
@@ -171,9 +164,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
                 }
             };
 
-            scope.$watch('collection', function () {
-                scope.initPlaceholder();
-            }, true);
+            scope.$watch('collection', function () {scope.initPlaceholder();}, true);
 
             scope.isActive = false;
 			

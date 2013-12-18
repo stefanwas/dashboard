@@ -1,20 +1,20 @@
-<input type="text" ng-model="filteringText" class="input-text" ng-focus="openDropdown()" placeholder=""/> 
+<input type="text" ng-model="filteringText" class="input-text" ng-focus="openDropdown()" ng-change="expandAll(filteringText)" placeholder=""/>
 
 <div class="filter" ng-show="isActive">
 
 	<input type="checkbox" class="select-all" ng-model="master" ng-init="master=true" ng-change="changeMasterSelection(master)"/>Select all<br />
 	
-	<div ng-repeat="group in collection" ng-init="extend = false">
+	<div ng-repeat="group in collection | hierarchyGroupFilter : filteringText">
 
-        <img alt="Extend" src="img/sq_plus_icon25.png" ng-click="extend = true" ng-hide="extend" />
-		<img alt="Collapse" src="img/sq_minus_icon25.png" ng-click="extend = false" ng-show="extend" /> 
+        <img alt="Extend" src="img/sq_plus_icon25.png" ng-click="group.expand = true" ng-hide="group.expand" />
+		<img alt="Collapse" src="img/sq_minus_icon25.png" ng-click="group.expand = false" ng-show="group.expand" />
 
-        <input type="checkbox" ng-model="group.selected"  ng-change="changeGroupSelection(group)"><!--{{ group.name }} <br>-->
-        <span ng-bind-html="group.name | highlightFilter : filteringText"></span>
+        <input type="checkbox" ng-model="group.selected"  ng-change="changeGroupSelection(group)">
+        <span ng-bind-html="group.name | highlightMatcher : filteringText"></span>
 
-        <div class="filter-item" ng-repeat="item in group.items | filter : filteringText" ng-show="extend">
-			<input type="checkbox" ng-model="item.selected">
-            <span ng-bind-html="item.name | highlightFilter : filteringText"></span><!--{{ item.name }} <br>-->
+        <div class="filter-item" ng-repeat="item in group.items | hierarchyItemFilter : filteringText" ng-show="group.expand">
+			<input type="checkbox" ng-model="item.selected" ng-change="changeItemSelection(item)">
+            <span ng-bind-html="item.name | highlightMatcher : filteringText"></span>
 		</div>
 	</div>
 

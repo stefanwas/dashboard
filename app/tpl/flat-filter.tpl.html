@@ -5,8 +5,8 @@
 	<input type="checkbox" ng-model="master" ng-change="changeMasterSelection(master)" ng-init="master=true"/>Select all<br />
 
 	<div ng-repeat="item in collection | filter : filteringText">
-        <input type="checkbox" ng-model="item.selected"/>
-        <span ng-bind-html="item.name | highlightFilter : filteringText"></span>
+        <input type="checkbox" ng-model="item.selected" ng-change="changeItemSelection(item)"/>
+        <span ng-bind-html="item.name | highlightMatcher : filteringText"></span>
 	</div>
 
 </div>
