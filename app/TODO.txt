@@ -1,0 +1,5 @@
+1. Move expand/collapse icons to css.
+2. Refactor close popup logic.
+3. Remove styles from html.
+4. Improve Placeholders
+5. Change DIVs into list items at ng-repeat directives

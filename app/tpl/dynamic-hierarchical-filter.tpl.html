@@ -1,7 +1,7 @@
 <input type="text" value="All" ng-model="filteringText" class="input-text" ng-focus="openDropdown()" ng-change="retrieveItems(filterName, filteringText)"  />
 <div>
     <div class="filter" ng-show="isActive" style="float:left;">
-        <div ng-repeat="group in collection" ng-init="extend = false" ng-hide="group.selected">
+        <div ng-repeat="group in collection | limitTo : 25" ng-init="extend = false" ng-hide="group.selected">
                 <img alt="Extend" src="img/sq_plus_icon25.png" ng-click="extend = true" ng-hide="extend" />
                 <img alt="Collapse" src="img/sq_minus_icon25.png" ng-click="extend = false" ng-show="extend" />
 

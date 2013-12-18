@@ -1,12 +1,29 @@
 angular.module('dashboard.utils', [])
 .factory('utils', function() {
 
+    var nonHtmlCharacterMap = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': '&quot;',
+        "'": '&#39;',
+        "/": '&#x2F;'
+    };
+
+    var escapeHtml = function escapeHtml(string) {
+        return string.replace(/[&<>"'\/]/g, function (character) {return nonHtmlCharacterMap[character];});
+    }
+
+    var escapeRegexp = function escapeRegexp(queryToEscape) {
+        return queryToEscape.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
+    }
+
     var prepareItemsToDisplay = function (itemNames, defaultValue) {
         var itemsToDisplay = [];
         if (itemNames != null) {
             angular.forEach(itemNames, function (itemName) {
                 itemsToDisplay.push({
-                    'name': itemName,
+                    'name': escapeHtml(itemName),
                     'selected': defaultValue,
                     'visible': true
                 });
@@ -21,7 +38,7 @@ angular.module('dashboard.utils', [])
                 angular.forEach(groups, function (group) {
 
                     var preparedGroup = {
-                        name: group.name,
+                        name: escapeHtml(group.name),
                         selected: defaultValue,
                         expand: false,
                         visible: true
@@ -37,19 +54,22 @@ angular.module('dashboard.utils', [])
             return groupsToDisplay;
         }
 
-	return {
-		isInside : function(event, elem) {
-			var domElement = event.target;
-			while (domElement != null) {
-				if (domElement == elem || domElement.$$NG_REMOVED) { //TODO refactor & redesing this
-					return true;
-				} else {
-					domElement = domElement.parentElement;
-				}
-			}
-			return false;
-		},
+    var isInside = function(event, elem) {
+        var domElement = event.target;
+        while (domElement != null) {
+            if (domElement == elem || domElement.$$NG_REMOVED) { //TODO refactor & redesing this
+                return true;
+            } else {
+                domElement = domElement.parentElement;
+            }
+        }
+        return false;
+    }
 
+	return {
+		isInside : isInside,
+        escapeHtml : escapeHtml,
+        escapeRegexp : escapeRegexp,
         prepareItemsToDisplay : prepareItemsToDisplay,
         prepareGroupsToDisplay : prepareGroupsToDisplay
 	}
