@@ -5,8 +5,8 @@ dashboardFilters.filter('highlightMatcher', function () {
         return queryToEscape.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
     }
 
-    return function(matchItem, query) {
-        return query ? matchItem.replace(new RegExp(escapeRegexp(query), 'gi'), '<span class="highlight">$&</span>') : matchItem;
+    return function(input, query) {
+        return query ? input.replace(new RegExp(escapeRegexp(query), 'gi'), '<span class="highlight">$&</span>') : input;
     };
 });
 
@@ -40,7 +40,6 @@ dashboardFilters.filter('hierarchyGroupFilter', function () {
     }
 });
 
-
 dashboardFilters.filter('hierarchyItemFilter', function () {
 
     function escapeRegexp(queryToEscape) {
@@ -57,7 +56,6 @@ dashboardFilters.filter('hierarchyItemFilter', function () {
         angular.forEach(items, function (item) {
             if (item.name.match(regExp) || (item.groupRef && item.groupRef.name.match(regExp))) {
                 result.push(item);
-                return;
             }
         });
         return result;

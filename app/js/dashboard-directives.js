@@ -147,10 +147,8 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 				
 				if (index >= 0) {
 					scope.selectedItems.splice(index, 1);
-                    item.visibilityClass = 'visible';
 				} else {
 					scope.selectedItems.push(item);
-                    item.visibilityClass = 'hidden';
 				}
 			};
 
@@ -201,26 +199,17 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
             }
 
             function markSelectedItems(items) {
-                for (var i=0; i<items.length; i++) {
-                    if (findItemIndex(items[i]) >= 0) {
-                        items[i].selected = true;
+                angular.forEach(items, function (item){
+                    if (findItemIndex(item) >= 0) {
+                        item.selected = true;
                     }
-                }
+                });
             }
 
-            function hideSelectedItems(items) {
-                for (var i=0; i<items.length; i++) {
-                    if (items[i].selected) {
-                        items[i].visibilityClass = 'hidden';
-                    }
-                }
-            }
-
-            scope.retrieveItems = function (filterName, query) { //to rewrite (when moving items from left to right)
-                Filter.get({filterName: filterName, query: scope.filteringText}, function (result) {
+            scope.retrieveItems = function (filterName, query) {
+                Filter.get({filterName: filterName, query:query}, function (result) {
                     scope.collection = utils.prepareItemsToDisplay(result.items, false);
                     markSelectedItems(scope.collection);
-                    hideSelectedItems(scope.collection);
                     console.log('>>> collection size=' + scope.collection.length);
                 });
             }
@@ -244,100 +233,61 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 
             scope.selectedGroups = [];
 
-            scope.addOrRemove = function (group, item) {
-                if (item != null) {
-                    addOrRemoveItem(group, item);
-                } else {
-                    addOrRemoveGroup(group);
-                }
-            }
-
-            function addOrRemoveItem (group, item) {
-
-                if (!item.selected) {
-                    group.selected = false;
-                }
-
-                var selectedGroup = findSelectedGroup(group.name);
-
-                if (selectedGroup == null) {
-                    var newGroup = {name: group.name, selected: false, items: [item]};
-                    addGroup(newGroup);
-                } else {
-                    var selectedItem = findSelectedItem(selectedGroup, item.name);
-                    if (selectedItem == null) {
-                        addItemToGroup(selectedGroup, item);
-                    } else {
-                        removeItemFromGroup(selectedGroup, item);
-                        if (selectedGroup.items.length == 0) removeGroup(selectedGroup);
+            function findItemIndex(item, items) {
+                for (var i=0; i<items.length; i++) {
+                    if (items[i].name == item.name) {
+                        return i;
                     }
                 }
+                return -1;
             }
 
-            function addOrRemoveGroup (group) {
-                var selectedGroup = findSelectedGroup(group.name);
-
-                angular.forEach(group.items, function (item) {
-                   item.selected = group.selected;
-                });
-
-                if (selectedGroup != null) {
-                    removeGroup(group)
-                    if (!selectedGroup.selected) {
-                        var newItems = [].concat(group.items);
-                        var newGroup = {name: group.name, selected: true, items: newItems};
-                        addGroup(newGroup);
+            function findGroupIndex(group, groups) {
+                for (var i=0; i<groups.length; i++) {
+                    if (groups[i].name == group.name) {
+                        return i;
                     }
-                } else {
-                    var newItems = [].concat(group.items);
-                    var newGroup = {name: group.name, selected: true, items: newItems};
-                    addGroup(newGroup);
                 }
-            };
+                return -1;
+            }
 
-            function addGroup(group) {
+            scope.addGroup = function (group) {
                 scope.selectedGroups.push(group);
             }
 
-            function removeGroup(group) {
-                for (var i=0; i<scope.selectedGroups.length; i++) {
-                    var selectedGroup = scope.selectedGroups[i];
-                    if (selectedGroup.name == group.name) {
-                        scope.selectedGroups.splice(i, 1);
-                        return;
-                    }
+            scope.removeGroup = function (group) {
+                var index = findGroupIndex(group, scope.selectedGroups);
+                if (index >= 0) {
+                    scope.selectedGroups.splice(index, 1);
                 }
             }
 
-            function addItemToGroup(group, item) {
-                group.items.push(item);
+            scope.addItem = function (item) {
+                scope.selectedGroups.push(item.groupRef);
             }
 
-            function removeItemFromGroup(group, item) {
-                for (var i=0; i<group.items.length; i++) {
-                    var selectedItem = group.items[i];
-                    if (selectedItem.name == item.name) {
-                        group.items.splice(i, 1);
-                        group.selected = false;
-                        return;
-                    }
+            scope.removeItem = function (item) {
+                var numberOfSelectedItems = 0;
+                angular.forEach(item.groupRef.items, function (item) {
+                   if (item.selected) {
+                       numberOfSelectedItems++;
+                   }
+                });
+                if (numberOfSelectedItems == 0) {
+                    scope.removeGroup(item.groupRef);
                 }
             }
 
-            function findSelectedGroup (groupName) {
-                for (var i=0; i<scope.selectedGroups.length; i++) {
-                    var group = scope.selectedGroups[i];
-                    if (group.name == groupName) return group;
-                }
-                return null;
-            }
+            scope.changeGroupSelection = function(group) {
+                angular.forEach(group.items, function(item) {
+                    item.selected = group.selected;
+                });
+            };
 
-            function findSelectedItem (group, itemName) {
-                for (var i=0; i<group.items.length; i++) {
-                    var item = group.items[i];
-                    if (item.name == itemName) return item;
+            scope.changeItemSelection = function(item) {
+                if (!item.selected) {
+                    item.groupRef.selected = false;
                 }
-                return null;
             }
 
             // hide & show dropdown
@@ -369,28 +319,9 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
             };
 
             //////
-
-            function findItemIndex(item, items) {
-                for (var i=0; i<items.length; i++) {
-                    if (items[i].name == item.name) {
-                        return i;
-                    }
-                }
-                return -1;
-            }
-
-            function findGroupIndex(group) {
-                for (var i=0; i<scope.selectedGroups.length; i++) {
-                    if (scope.selectedGroups[i].name == group.name) {
-                        return i;
-                    }
-                }
-                return -1;
-            }
-
-            function markSelectedItems(groups) {
+            function markSelectedGroups(groups) {
                 angular.forEach(groups, function (group) {
-                    var selectedGroupIdx = findGroupIndex(group);
+                    var selectedGroupIdx = findGroupIndex(group, groups);
                     if (selectedGroupIdx >= 0) {
                         group.selected = scope.selectedGroups[selectedGroupIdx].selected;
                         angular.forEach(group.items, function (item) {
@@ -402,14 +333,13 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
                 })
             }
 
-            scope.retrieveItems = function (filterName, query) { //to rewrite (when moving items from left to right)
+            scope.retrieveItems = function (filterName, query) {
                 Filter.get({filterName: filterName, query: query}, function (result) {
                     scope.collection = utils.prepareGroupsToDisplay(result.groups, false);
-                    markSelectedItems(scope.collection);
+                    markSelectedGroups(scope.collection);
                     console.log('>>> collection size=' + scope.collection.length);
                 });
             }
-
         }
 
         return {

@@ -1,28 +1,33 @@
 <input type="text" value="All" ng-model="filteringText" class="input-text" ng-focus="openDropdown()" ng-change="retrieveItems(filterName, filteringText)"  />
 <div>
     <div class="filter" ng-show="isActive" style="float:left;">
-        <div ng-repeat="group in collection" ng-init="extend = false">
+        <div ng-repeat="group in collection" ng-init="extend = false" ng-hide="group.selected">
+                <img alt="Extend" src="img/sq_plus_icon25.png" ng-click="extend = true" ng-hide="extend" />
+                <img alt="Collapse" src="img/sq_minus_icon25.png" ng-click="extend = false" ng-show="extend" />
 
-            <img alt="Extend" src="img/sq_plus_icon25.png" ng-click="extend = true" ng-hide="extend" />
-            <img alt="Collapse" src="img/sq_minus_icon25.png" ng-click="extend = false" ng-show="extend" />
+                <input type="checkbox" ng-model="group.selected"  ng-change="changeGroupSelection(group); addGroup(group)">
+                <span ng-bind-html="group.name | highlightMatcher : filteringText"></span>
 
-            <input type="checkbox" ng-model="group.selected"  ng-change="changeGroupSelection(group); addOrRemove(group)">{{ group.name }}<br>
-
-            <div class="filter-item" ng-repeat="item in group.items" ng-show="extend">
-                <input type="checkbox" ng-model="item.selected" ng-change="addOrRemove(group, item)">{{ item.name }} <br>
-            </div>
+                <div class="filter-item" ng-repeat="item in group.items" ng-show="extend">
+                    <div ng-hide="item.selected">
+                        <input type="checkbox" ng-model="item.selected" ng-change="addItem(item)">
+                        <span ng-bind-html="item.name | highlightMatcher : filteringText"></span>
+                    </div>
+                </div>
         </div>
     </div>
 
     <div class="filter-selected-items" ng-show="isActive && selectedGroups.length > 0">
-        <div ng-repeat="selectedGroup in selectedGroups"><b> {{ selectedGroup.name }} </b>
+        <div ng-repeat="selectedGroup in selectedGroups">
+            <input type="checkbox" ng-model="selectedGroup.selected" ng-change="changeGroupSelection(selectedGroup); removeGroup(selectedGroup)"/> {{ selectedGroup.name }}
             <ul>
-                <li ng-repeat="selectedItem in selectedGroup.items"> -> {{ selectedItem.name }}</li>
+                <li ng-repeat="selectedItem in selectedGroup.items" ng-show="selectedItem.selected">
+                    <input type="checkbox" ng-model="selectedItem.selected" ng-change="changeItemSelection(selectedItem); removeItem(selectedItem)"/>{{ selectedItem.name }}
+                </li>
             </ul>
         </div>
     </div>
 </div>
-
 
 
 
