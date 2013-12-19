@@ -1,4 +1,4 @@
-<input type="text" value="All" ng-model="filteringText" class="input-text" ng-focus="openDropdown()" ng-change="retrieveItems(filterName, filteringText)"  />
+<input type="text" value="All" ng-model="filteringText" class="input-text" ng-focus="openDropdown()" ng-change="retrieveItems(filterName, filteringText)" placeholder="{{ placeholder }}" />
 <div>
     <div class="filter" ng-show="isActive" style="float:left;">
         <div ng-repeat="group in collection | limitTo : 25" ng-init="extend = false" ng-hide="group.selected">

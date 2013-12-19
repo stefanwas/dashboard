@@ -5,26 +5,18 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
     .directive('flatFilter', ['$document', 'utils', function($document, utils) {
         function link(scope, element, attrs) {
 
-            scope.initPlaceholder = function () {
-                if (scope.master) {
-                    scope.placeholder = 'all selected';
-                } else {
-                    for (var i=0; i<scope.collection.length; i++) {
-                        if (scope.collection[i].selected) {
-                            scope.placeholder = 'some selected';
-                            return;
-                        }
-                    }
-                    scope.placeholder = 'none selected';
-                }
-            };
+            scope.updatePlaceholder = function () {
+                scope.placeholder = utils.getStaticPlaceholder(scope.master, scope.collection, 'item');
+            }
 
             scope.changeMasterSelection = function(selection) {
                 angular.forEach(scope.collection, function(item) { item.selected = selection; });
+                scope.updatePlaceholder();
             };
 
             scope.changeItemSelection = function(item) {
                 if (!item.selected) { scope.master = false; }
+                scope.updatePlaceholder();
             }
 
             scope.isActive = false;
@@ -54,7 +46,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
                 $document.off('click', null, scope.dismissClickHandler);
             };
 
-            scope.initPlaceholder();
+            scope.updatePlaceholder();
         }
 
         return {
@@ -70,12 +62,17 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 
 	.directive('hierarchicalFilter', ['$document', 'utils', function($document, utils) {
 		function link(scope, element, attrs) {
+
+            scope.updatePlaceholder = function () {
+                scope.placeholder = utils.getStaticPlaceholder(scope.master, scope.collection, 'group');
+            }
 			
 			scope.changeMasterSelection = function(selection) {
 				angular.forEach(scope.collection, function(group) {
 					group.selected = selection;
 					scope.changeGroupSelection(group);
 				});
+                scope.updatePlaceholder();
 			};
 	
 			scope.changeGroupSelection = function(group) {
@@ -85,6 +82,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 				angular.forEach(group.items, function(item) {
 					item.selected = group.selected;
 				});
+                scope.updatePlaceholder();
 			};
 
             scope.changeItemSelection = function(item) {
@@ -92,6 +90,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
                     item.groupRef.selected = false;
                     scope.master = false;
                 }
+                scope.updatePlaceholder();
             }
 
             scope.expandAll = function (query) {
@@ -125,6 +124,8 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 			scope.unbindClickHandler = function () {
 				$document.off('click', null, scope.dismissClickHandler);
 			}
+
+            scope.updatePlaceholder();
 		}
 		
 	    return {
@@ -135,12 +136,15 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 	    };
 	}])
 
-	
 	.directive('dynamicFlatFilter', ['$document', 'utils', 'Filter', function($document, utils, Filter) {
 		
 		function link(scope, element, attrs) {
 
 			scope.selectedItems = [];
+
+            scope.updatePlaceholder = function () {
+                scope.placeholder = utils.getDynamicPlaceholder(scope.selectedItems, 'item');
+            }
 			
 			scope.addOrRemove = function (item) {
 				var index = findItemIndex(item);
@@ -150,19 +154,8 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 				} else {
 					scope.selectedItems.push(item);
 				}
+                scope.updatePlaceholder();
 			};
-
-            scope.initPlaceholder = function () {
-                if (scope.selectedItems.length == 0) {
-                    scope.placeholder = 'unspecified';
-                } else if (scope.selectedItems.length == 1) {
-                    scope.placeholder = '1 item selected';
-                } else {
-                    scope.placeholder = scope.selectedItems.length + ' items selected';
-                }
-            };
-
-            scope.$watch('collection', function () {scope.initPlaceholder();}, true);
 
             scope.isActive = false;
 			
@@ -213,7 +206,8 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
                     console.log('>>> collection size=' + scope.collection.length);
                 });
             }
-            scope.initPlaceholder();
+
+            scope.updatePlaceholder();
 		}
 		
 	    return {
@@ -232,6 +226,10 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
         function link(scope, element, attrs) {
 
             scope.selectedGroups = [];
+
+            scope.updatePlaceholder = function () {
+                scope.placeholder = utils.getDynamicPlaceholder(scope.selectedGroups, 'group');
+            }
 
             function findItemIndex(item, items) {
                 for (var i=0; i<items.length; i++) {
@@ -253,6 +251,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 
             scope.addGroup = function (group) {
                 scope.selectedGroups.push(group);
+                scope.updatePlaceholder();
             }
 
             scope.removeGroup = function (group) {
@@ -260,10 +259,12 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
                 if (index >= 0) {
                     scope.selectedGroups.splice(index, 1);
                 }
+                scope.updatePlaceholder();
             }
 
             scope.addItem = function (item) {
                 scope.selectedGroups.push(item.groupRef);
+                scope.updatePlaceholder();
             }
 
             scope.removeItem = function (item) {
@@ -276,6 +277,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
                 if (numberOfSelectedItems == 0) {
                     scope.removeGroup(item.groupRef);
                 }
+                scope.updatePlaceholder();
             }
 
             scope.changeGroupSelection = function(group) {
@@ -340,6 +342,8 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
                     console.log('>>> collection size=' + scope.collection.length);
                 });
             }
+
+            scope.updatePlaceholder();
         }
 
         return {
