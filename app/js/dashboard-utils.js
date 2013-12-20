@@ -1,5 +1,4 @@
-angular.module('dashboard.utils', [])
-.factory('utils', function() {
+angular.module('dashboard.utils', []).factory('utils', function() {
 
     var nonHtmlCharacterMap = {
         "&": "&amp;",
@@ -53,18 +52,6 @@ angular.module('dashboard.utils', [])
             }
             return groupsToDisplay;
         }
-
-    var isInside = function(event, elem) {
-        var domElement = event.target;
-        while (domElement != null) {
-            if (domElement == elem || domElement.$$NG_REMOVED) { //TODO refactor & redesing this
-                return true;
-            } else {
-                domElement = domElement.parentElement;
-            }
-        }
-        return false;
-    }
 
     function getNoOfSelectedItems(items) {
         var numberOfSelectedItems = 0;
@@ -129,24 +116,32 @@ angular.module('dashboard.utils', [])
         return noneSelected;
     }
 
-//
-//            scope.initPlaceholder = function () {
-//                if (scope.selectedItems.length == 0) {
-//                    scope.placeholder = 'unspecified';
-//                } else if (scope.selectedItems.length == 1) {
-//                    scope.placeholder = '1 item selected';
-//                } else {
-//                    scope.placeholder = scope.selectedItems.length + ' items selected';
-//                }
-//            };
+    var findItemIndexByName = function findItemIndexByName(item, items) {
+        for (var i=0; i<items.length; i++) {
+            if (items[i].name == item.name) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    var findGroupIndexByName = function findGroupIndexByName(group, groups) {
+        for (var i=0; i<groups.length; i++) {
+            if (groups[i].name == group.name) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
 	return {
-		isInside : isInside,
         escapeHtml : escapeHtml,
         escapeRegexp : escapeRegexp,
         prepareItemsToDisplay : prepareItemsToDisplay,
         prepareGroupsToDisplay : prepareGroupsToDisplay,
         getStaticPlaceholder : getStaticPlaceholder,
-        getDynamicPlaceholder : getDynamicPlaceholder
+        getDynamicPlaceholder : getDynamicPlaceholder,
+        findItemIndexByName : findItemIndexByName,
+        findGroupIndexByName : findGroupIndexByName
 	}
 });

@@ -1,8 +1,8 @@
 /* Directives */
 
-angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services'])
+angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services', 'dashboard.events'])
 
-    .directive('flatFilter', ['$document', 'utils', function($document, utils) {
+    .directive('flatFilter', ['$document', 'utils', 'events', function($document, utils, events) {
         function link(scope, element, attrs) {
 
             scope.updatePlaceholder = function () {
@@ -19,33 +19,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
                 scope.updatePlaceholder();
             }
 
-            scope.isActive = false;
-
-            scope.openDropdown = function () {
-                scope.isActive = true;
-                scope.bindClickHandler();
-            };
-
-            scope.closeDropdown = function () {
-                scope.isActive = false;
-                scope.unbindClickHandler();
-            };
-
-            scope.dismissClickHandler = function (event) {
-                if (!utils.isInside(event, element[0])) {
-                    scope.closeDropdown();
-                    scope.$apply();
-                }
-            };
-
-            scope.bindClickHandler = function () {
-                $document.on('click', null, scope.dismissClickHandler);
-            };
-
-            scope.unbindClickHandler = function () {
-                $document.off('click', null, scope.dismissClickHandler);
-            };
-
+            events.attachDropdownHandler(scope, element, $document);
             scope.updatePlaceholder();
         }
 
@@ -60,7 +34,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
         };
     }])
 
-	.directive('hierarchicalFilter', ['$document', 'utils', function($document, utils) {
+	.directive('hierarchicalFilter', ['$document', 'utils', 'events', function($document, utils, events) {
 		function link(scope, element, attrs) {
 
             scope.updatePlaceholder = function () {
@@ -79,9 +53,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
                 if (!group.selected) {
                     scope.master = false;
                 }
-				angular.forEach(group.items, function(item) {
-					item.selected = group.selected;
-				});
+				angular.forEach(group.items, function(item) {item.selected = group.selected;});
                 scope.updatePlaceholder();
 			};
 
@@ -98,33 +70,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
                 angular.forEach(scope.collection, function(group) { group.expand = expand; });
             }
 
-			scope.isActive = false;
-			
-			scope.openDropdown = function () {
-				scope.isActive = true;
-				scope.bindClickHandler();
-			};
-			
-			scope.closeDropdown = function () {
-				scope.isActive = false;
-				scope.unbindClickHandler();
-			};
-			
-			scope.dismissClickHandler = function (event) {
-				if (!utils.isInside(event, element[0])) {
-					scope.closeDropdown();
-					scope.$apply();
-				}
-			};
-			
-			scope.bindClickHandler = function (handler) {
-				$document.on('click', null, scope.dismissClickHandler);	
-			};
-			
-			scope.unbindClickHandler = function () {
-				$document.off('click', null, scope.dismissClickHandler);
-			}
-
+            events.attachDropdownHandler(scope, element, $document);
             scope.updatePlaceholder();
 		}
 		
@@ -136,7 +82,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 	    };
 	}])
 
-	.directive('dynamicFlatFilter', ['$document', 'utils', 'Filter', function($document, utils, Filter) {
+	.directive('dynamicFlatFilter', ['$document', 'utils', 'Filter', 'events', function($document, utils, Filter, events) {
 		
 		function link(scope, element, attrs) {
 
@@ -147,7 +93,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
             }
 			
 			scope.addOrRemove = function (item) {
-				var index = findItemIndex(item);
+				var index = utils.findItemIndexByName(item, scope.selectedItems);
 				
 				if (index >= 0) {
 					scope.selectedItems.splice(index, 1);
@@ -157,43 +103,9 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
                 scope.updatePlaceholder();
 			};
 
-            scope.isActive = false;
-			
-			scope.openDropdown = function () {
-				scope.isActive = true;
-				scope.bindClickHandler();
-			};
-			
-			scope.closeDropdown = function () {
-				scope.isActive = false;
-				scope.unbindClickHandler();
-			};
-			
-			scope.dismissClickHandler = function (event) {
-				if (!utils.isInside(event, element[0])) {
-					scope.closeDropdown();
-					scope.$apply();
-				}
-			};
-			
-			scope.bindClickHandler = function () {
-				$document.on('click', null, scope.dismissClickHandler);	
-			};
-			
-			scope.unbindClickHandler = function () {
-				$document.off('click', null, scope.dismissClickHandler);
-			};
-
-            function findItemIndex(item) {
-                for (var i=0; i<scope.selectedItems.length; i++) {
-                    if (scope.selectedItems[i].name == item.name) return i;
-                }
-                return -1;
-            }
-
             function markSelectedItems(items) {
                 angular.forEach(items, function (item){
-                    if (findItemIndex(item) >= 0) {
+                    if (utils.findItemIndexByName(item, scope.selectedItems) >= 0) {
                         item.selected = true;
                     }
                 });
@@ -207,6 +119,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
                 });
             }
 
+            events.attachDropdownHandler(scope, element, $document);
             scope.updatePlaceholder();
 		}
 		
@@ -221,7 +134,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
 	    };		
 	}])
 
-    .directive('dynamicHierarchicalFilter', ['$document', 'utils', 'Filter', function($document, utils, Filter) {
+    .directive('dynamicHierarchicalFilter', ['$document', 'utils', 'Filter', 'events', function($document, utils, Filter, events) {
 
         function link(scope, element, attrs) {
 
@@ -231,31 +144,13 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
                 scope.placeholder = utils.getDynamicPlaceholder(scope.selectedGroups, 'group');
             }
 
-            function findItemIndex(item, items) {
-                for (var i=0; i<items.length; i++) {
-                    if (items[i].name == item.name) {
-                        return i;
-                    }
-                }
-                return -1;
-            }
-
-            function findGroupIndex(group, groups) {
-                for (var i=0; i<groups.length; i++) {
-                    if (groups[i].name == group.name) {
-                        return i;
-                    }
-                }
-                return -1;
-            }
-
             scope.addGroup = function (group) {
                 scope.selectedGroups.push(group);
                 scope.updatePlaceholder();
             }
 
             scope.removeGroup = function (group) {
-                var index = findGroupIndex(group, scope.selectedGroups);
+                var index = utils.findGroupIndexByName(group, scope.selectedGroups);
                 if (index >= 0) {
                     scope.selectedGroups.splice(index, 1);
                 }
@@ -281,53 +176,20 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
             }
 
             scope.changeGroupSelection = function(group) {
-                angular.forEach(group.items, function(item) {
-                    item.selected = group.selected;
-                });
+                angular.forEach(group.items, function(item) { item.selected = group.selected; });
             };
 
             scope.changeItemSelection = function(item) {
-                if (!item.selected) {
-                    item.groupRef.selected = false;
-                }
-            }
-
-            // hide & show dropdown
-            scope.isActive = false;
-
-            scope.openDropdown = function () {
-                scope.isActive = true;
-                scope.bindClickHandler();
+                if (!item.selected) { item.groupRef.selected = false; }
             };
 
-            scope.closeDropdown = function () {
-                scope.isActive = false;
-                scope.unbindClickHandler();
-            };
-
-            scope.dismissClickHandler = function (event) {
-                if (!utils.isInside(event, element[0])) {
-                    scope.closeDropdown();
-                    scope.$apply();
-                }
-            };
-
-            scope.bindClickHandler = function () {
-                $document.on('click', null, scope.dismissClickHandler);
-            };
-
-            scope.unbindClickHandler = function () {
-                $document.off('click', null, scope.dismissClickHandler);
-            };
-
-            //////
             function markSelectedGroups(groups) {
                 angular.forEach(groups, function (group) {
-                    var selectedGroupIdx = findGroupIndex(group, groups);
+                    var selectedGroupIdx = utils.findGroupIndexByName(group, scope.selectedGroups);
                     if (selectedGroupIdx >= 0) {
                         group.selected = scope.selectedGroups[selectedGroupIdx].selected;
                         angular.forEach(group.items, function (item) {
-                            if (findItemIndex(item, scope.selectedGroups[selectedGroupIdx].items) >= 0) {
+                            if (utils.findItemIndexByName(item, scope.selectedGroups[selectedGroupIdx].items) >= 0) {
                                 item.selected = true;
                             }
                         })
@@ -343,6 +205,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services']
                 });
             }
 
+            events.attachDropdownHandler(scope, element, $document);
             scope.updatePlaceholder();
         }
 
