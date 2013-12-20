@@ -1,11 +1,8 @@
 /* Controllers */
 
-var dashboardControllers = angular.module('dashboard.controllers', 
-		['dashboard.services', 
-		 'dashboard.utils', 
-		 'dashboard.mockdata']);
+var dashboardControllers = angular.module('dashboard.controllers', ['dashboard.services',  'dashboard.utils']);
 
-dashboardControllers.controller('FilterController', function($scope, filterService, utils, MockData) {
+dashboardControllers.controller('FilterController', function($scope, filterService, utils) {
 
     // static flat filters
     filterService.getAll({filterName: 'JobFunction'}, function (result) {
@@ -73,11 +70,11 @@ dashboardControllers.controller('FilterController', function($scope, filterServi
 
 
     // test filters
-    $scope.states = MockData.getStates();
-    $scope.states2 = MockData.getStates();
-    $scope.countries1 = MockData.getCountries();
-    $scope.countries2 = MockData.getCountries();
-    $scope.divisions = MockData.getDivisions();
+//    $scope.states = MockData.getStates();
+//    $scope.states2 = MockData.getStates();
+//    $scope.countries1 = MockData.getCountries();
+//    $scope.countries2 = MockData.getCountries();
+//    $scope.divisions = MockData.getDivisions();
 
 });
 
