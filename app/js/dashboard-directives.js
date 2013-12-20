@@ -82,7 +82,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services',
 	    };
 	}])
 
-	.directive('dynamicFlatFilter', ['$document', 'utils', 'Filter', 'events', function($document, utils, Filter, events) {
+	.directive('dynamicFlatFilter', ['$document', 'utils', 'filterService', 'events', function($document, utils, filterService, events) {
 		
 		function link(scope, element, attrs) {
 
@@ -112,7 +112,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services',
             }
 
             scope.retrieveItems = function (filterName, query) {
-                Filter.get({filterName: filterName, query:query}, function (result) {
+                filterService.get({filterName: filterName, query:query}, function (result) {
                     scope.collection = utils.prepareItemsToDisplay(result.items, false);
                     markSelectedItems(scope.collection);
                     console.log('>>> collection size=' + scope.collection.length);
@@ -134,7 +134,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services',
 	    };		
 	}])
 
-    .directive('dynamicHierarchicalFilter', ['$document', 'utils', 'Filter', 'events', function($document, utils, Filter, events) {
+    .directive('dynamicHierarchicalFilter', ['$document', 'utils', 'filterService', 'events', function($document, utils, filterService, events) {
 
         function link(scope, element, attrs) {
 
@@ -198,7 +198,7 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services',
             }
 
             scope.retrieveItems = function (filterName, query) {
-                Filter.get({filterName: filterName, query: query}, function (result) {
+                filterService.get({filterName: filterName, query: query}, function (result) {
                     scope.collection = utils.prepareGroupsToDisplay(result.groups, false);
                     markSelectedGroups(scope.collection);
                     console.log('>>> collection size=' + scope.collection.length);

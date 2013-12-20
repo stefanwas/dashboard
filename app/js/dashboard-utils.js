@@ -55,9 +55,7 @@ angular.module('dashboard.utils', []).factory('utils', function() {
 
     function getNoOfSelectedItems(items) {
         var numberOfSelectedItems = 0;
-
         angular.forEach(items, function (item) { if (item.selected) numberOfSelectedItems++; });
-
         return numberOfSelectedItems;
     }
 
@@ -65,9 +63,7 @@ angular.module('dashboard.utils', []).factory('utils', function() {
         var numberOfSelectedItems = 0;
 
         angular.forEach(groups, function (group) {
-            if (group.items) {
-                numberOfSelectedItems += getNoOfSelectedItems(group.items);
-            }
+            if (group.items) { numberOfSelectedItems += getNoOfSelectedItems(group.items); }
         });
 
         return numberOfSelectedItems;

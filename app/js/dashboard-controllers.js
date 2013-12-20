@@ -5,51 +5,51 @@ var dashboardControllers = angular.module('dashboard.controllers',
 		 'dashboard.utils', 
 		 'dashboard.mockdata']);
 
-dashboardControllers.controller('FilterController', function($scope, Filter, utils, MockData) {
+dashboardControllers.controller('FilterController', function($scope, filterService, utils, MockData) {
 
     // static flat filters
-    Filter.getAll({filterName: 'JobFunction'}, function (result) {
+    filterService.getAll({filterName: 'JobFunction'}, function (result) {
         $scope.jobFunctions = utils.prepareItemsToDisplay(result.items, true);
     });
 
-    Filter.getAll({filterName: 'AccountType'}, function (result) {
+    filterService.getAll({filterName: 'AccountType'}, function (result) {
         $scope.accountTypes = utils.prepareItemsToDisplay(result.items, true);
     });
 
-    Filter.getAll({filterName: 'Industry'}, function (result) {
+    filterService.getAll({filterName: 'Industry'}, function (result) {
         $scope.industries = utils.prepareItemsToDisplay(result.items, true);
     });
 
-    Filter.getAll({filterName: 'Year'}, function (result) {
+    filterService.getAll({filterName: 'Year'}, function (result) {
         $scope.years = utils.prepareItemsToDisplay(result.items, true);
     });
 
-    Filter.getAll({filterName: 'Category'}, function (result) {
+    filterService.getAll({filterName: 'Category'}, function (result) {
         $scope.categories = utils.prepareItemsToDisplay(result.items, true);
     });
 
 
     // static hierarchical filters
-    Filter.getAll({filterName: 'GroupOfProductsProduct'}, function (result) {
+    filterService.getAll({filterName: 'GroupOfProductsProduct'}, function (result) {
         $scope.groupOfProducts = utils.prepareGroupsToDisplay(result.groups, true);
     });
 
-    Filter.getAll({filterName: 'RegionCountry'}, function (result) {
+    filterService.getAll({filterName: 'RegionCountry'}, function (result) {
         $scope.regionCountries = utils.prepareGroupsToDisplay(result.groups, true);
     });
 
-    Filter.getAll({filterName: 'AbbDivisionBu'}, function (result) {
+    filterService.getAll({filterName: 'AbbDivisionBu'}, function (result) {
         $scope.abbDivisionBUs = utils.prepareGroupsToDisplay(result.groups, true);
     });
 
 
 
     // dynamic flat filters
-    Filter.getAll({filterName: 'SurveyName'}, function (result) {
+    filterService.getAll({filterName: 'SurveyName'}, function (result) {
         $scope.surveyNames = utils.prepareItemsToDisplay(result.items, false);
     });
 
-    Filter.getAll({filterName: 'AccountManager'}, function (result) {
+    filterService.getAll({filterName: 'AccountManager'}, function (result) {
         $scope.accountManagers = utils.prepareItemsToDisplay(result.items, false);
     });
 
@@ -57,17 +57,17 @@ dashboardControllers.controller('FilterController', function($scope, Filter, uti
 //        $scope.cities = utils.prepareItemsToDisplay(result.items, false);
 //    });
 
-    Filter.getAll({filterName: 'LocalBusinessManager'}, function (result) {
+    filterService.getAll({filterName: 'LocalBusinessManager'}, function (result) {
         $scope.localBusinessManagers = utils.prepareItemsToDisplay(result.items, false);
     });
 
-    Filter.getAll({filterName: 'SurveyDesigner'}, function (result) {
+    filterService.getAll({filterName: 'SurveyDesigner'}, function (result) {
         $scope.surveyDesigners = utils.prepareItemsToDisplay(result.items, false);
     });
 
     // dynamic hierarchical filters
 
-    Filter.getAll({filterName: 'CustomerAccount'}, function (result) {
+    filterService.getAll({filterName: 'CustomerAccount'}, function (result) {
         $scope.customerAccounts = utils.prepareGroupsToDisplay(result.groups, false);
     });
 
