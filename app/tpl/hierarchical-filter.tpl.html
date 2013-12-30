@@ -8,7 +8,7 @@
 
         <img alt="Extend" src="img/sq_plus_icon25.png" ng-click="group.expand = true" ng-hide="group.expand" />
 		<img alt="Collapse" src="img/sq_minus_icon25.png" ng-click="group.expand = false" ng-show="group.expand" />
-
+        <!--<span ng-class="{true: 'minus', false: 'plus'}[group.expand]"> </span>-->
         <input type="checkbox" ng-model="group.selected"  ng-change="changeGroupSelection(group)">
         <span ng-bind-html="group.name | highlightMatcher : filteringText"></span>
 

@@ -54,6 +54,20 @@ select {
     -moz-border-radius : 4px;
     border-radius : 4px;
 }
+
+.minus {
+    width: 9px;
+    height: 9px;
+    display: block;
+    background-image: url(../img/minus.png);
+}
+
+.plus {
+    width: 9px;
+    height: 9px;
+    display: block;
+    background-image: url(../img/plus.png);
+}
 	
 .input-text {
 	width: 215px;
