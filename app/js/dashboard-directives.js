@@ -112,10 +112,10 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services',
             }
 
             scope.retrieveItems = function (filterName, query) {
-                filterService.get({filterName: filterName, query:query}, function (result) {
+                filterService.get({filterName: filterName, query:query, maxResults:20}, function (result) {
                     scope.collection = utils.prepareItemsToDisplay(result.items, false);
                     markSelectedItems(scope.collection);
-                    console.log('>>> collection size=' + scope.collection.length);
+                    console.log('>>> DF filter collection size=' + scope.collection.length);
                 });
             }
 
@@ -198,10 +198,10 @@ angular.module('dashboard.directives', ['dashboard.utils', 'dashboard.services',
             }
 
             scope.retrieveItems = function (filterName, query) {
-                filterService.get({filterName: filterName, query: query}, function (result) {
+                filterService.get({filterName: filterName, query: query, maxResults:20}, function (result) {
                     scope.collection = utils.prepareGroupsToDisplay(result.groups, false);
                     markSelectedGroups(scope.collection);
-                    console.log('>>> collection size=' + scope.collection.length);
+                    console.log('>>> DH Filter collection size=' + scope.collection.length);
                 });
             }
 

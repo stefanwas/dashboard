@@ -42,11 +42,11 @@ dashboardControllers.controller('FilterController', function($scope, filterServi
 
 
     // dynamic flat filters
-    filterService.getAll({filterName: 'SurveyName'}, function (result) {
+    filterService.get({filterName: 'SurveyName', query:"", maxResults:20}, function (result) {
         $scope.surveyNames = utils.prepareItemsToDisplay(result.items, false);
     });
 
-    filterService.getAll({filterName: 'AccountManager'}, function (result) {
+    filterService.get({filterName: 'AccountManager', query:"", maxResults:20}, function (result) {
         $scope.accountManagers = utils.prepareItemsToDisplay(result.items, false);
     });
 
@@ -54,17 +54,17 @@ dashboardControllers.controller('FilterController', function($scope, filterServi
 //        $scope.cities = utils.prepareItemsToDisplay(result.items, false);
 //    });
 
-    filterService.getAll({filterName: 'LocalBusinessManager'}, function (result) {
+    filterService.get({filterName: 'LocalBusinessManager', query:"", maxResults:20}, function (result) {
         $scope.localBusinessManagers = utils.prepareItemsToDisplay(result.items, false);
     });
 
-    filterService.getAll({filterName: 'SurveyDesigner'}, function (result) {
+    filterService.get({filterName: 'SurveyDesigner', query:"", maxResults:20}, function (result) {
         $scope.surveyDesigners = utils.prepareItemsToDisplay(result.items, false);
     });
 
     // dynamic hierarchical filters
 
-    filterService.getAll({filterName: 'CustomerAccount'}, function (result) {
+    filterService.get({filterName: 'CustomerAccount', query:"", maxResults:20}, function (result) {
         $scope.customerAccounts = utils.prepareGroupsToDisplay(result.groups, false);
     });
 
