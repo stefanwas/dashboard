@@ -25,6 +25,17 @@ dashboardControllers.controller('FilterController', function($scope, filterServi
         $scope.categories = utils.prepareItemsToDisplay(result.items, true);
     });
 
+//    filterService.getAll({filterName: 'CardType'}, function (result) {
+//        $scope.cardTypes = utils.prepareItemsToDisplay(result.items, true);
+//    });
+
+    filterService.getAll({filterName: 'NetPromoterType'}, function (result) {
+        $scope.netPromoterTypes = utils.prepareItemsToDisplay(result.items, true);
+    });
+
+    filterService.getAll({filterName: 'CustomerType'}, function (result) {
+        $scope.customerTypes = utils.prepareItemsToDisplay(result.items, true);
+    });
 
     // static hierarchical filters
     filterService.getAll({filterName: 'GroupOfProductsProduct'}, function (result) {
