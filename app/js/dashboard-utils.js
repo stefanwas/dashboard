@@ -11,19 +11,20 @@ angular.module('dashboard.utils', []).factory('utils', function() {
 
     var escapeHtml = function escapeHtml(string) {
         return string.replace(/[&<>"'\/]/g, function (character) {return nonHtmlCharacterMap[character];});
-    }
+    };
 
     var escapeRegexp = function escapeRegexp(queryToEscape) {
         return queryToEscape.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
-    }
+    };
 
-    var prepareItemsToDisplay = function (itemNames, defaultValue) {
+    var prepareItemsToDisplay = function (items, defaultCheckedValue) {
         var itemsToDisplay = [];
-        if (itemNames != null) {
-            angular.forEach(itemNames, function (itemName) {
+        if (items != null) {
+            angular.forEach(items, function (item) {
                 itemsToDisplay.push({
-                    'name': escapeHtml(itemName),
-                    'selected': defaultValue,
+                    'key': item.key,
+                    'name': escapeHtml(item.name),
+                    'selected': defaultCheckedValue,
                     'visible': true
                 });
             });
@@ -32,26 +33,26 @@ angular.module('dashboard.utils', []).factory('utils', function() {
     };
 
     var prepareGroupsToDisplay = function (groups, defaultValue) {
-            var groupsToDisplay = [];
-            if (groups != null) {
-                angular.forEach(groups, function (group) {
+        var groupsToDisplay = [];
+        if (groups != null) {
+            angular.forEach(groups, function (group) {
 
-                    var preparedGroup = {
-                        name: escapeHtml(group.name),
-                        selected: defaultValue,
-                        expand: false,
-                        visible: true
-                    };
+                var preparedGroup = {
+                    name: escapeHtml(group.name),
+                    selected: defaultValue,
+                    expand: false,
+                    visible: true
+                };
 
-                    var preparedItems = prepareItemsToDisplay(group.items, defaultValue);
+                var preparedItems = prepareItemsToDisplay(group.items, defaultValue);
 
-                    preparedGroup.items = preparedItems;
-                    angular.forEach(preparedItems, function (item) { item.groupRef = preparedGroup; });
-                    groupsToDisplay.push(preparedGroup);
-                });
-            }
-            return groupsToDisplay;
+                preparedGroup.items = preparedItems;
+                angular.forEach(preparedItems, function (item) { item.groupRef = preparedGroup; });
+                groupsToDisplay.push(preparedGroup);
+            });
         }
+        return groupsToDisplay;
+    };
 
     function getNoOfSelectedItems(items) {
         var numberOfSelectedItems = 0;
@@ -97,7 +98,7 @@ angular.module('dashboard.utils', []).factory('utils', function() {
         }
 
         return noneSelected;
-    }
+    };
 
     var getDynamicPlaceholder = function getDynamicPlaceholder(elements, elementType) {
         var noneSelected = 'unspecified';
@@ -110,7 +111,7 @@ angular.module('dashboard.utils', []).factory('utils', function() {
         }
 
         return noneSelected;
-    }
+    };
 
     var findItemIndexByName = function findItemIndexByName(item, items) {
         for (var i=0; i<items.length; i++) {
@@ -119,7 +120,7 @@ angular.module('dashboard.utils', []).factory('utils', function() {
             }
         }
         return -1;
-    }
+    };
 
     var findGroupIndexByName = function findGroupIndexByName(group, groups) {
         for (var i=0; i<groups.length; i++) {
@@ -128,9 +129,9 @@ angular.module('dashboard.utils', []).factory('utils', function() {
             }
         }
         return -1;
-    }
+    };
 
-	return {
+    return {
         escapeHtml : escapeHtml,
         escapeRegexp : escapeRegexp,
         prepareItemsToDisplay : prepareItemsToDisplay,
@@ -139,5 +140,5 @@ angular.module('dashboard.utils', []).factory('utils', function() {
         getDynamicPlaceholder : getDynamicPlaceholder,
         findItemIndexByName : findItemIndexByName,
         findGroupIndexByName : findGroupIndexByName
-	}
+    };
 });
